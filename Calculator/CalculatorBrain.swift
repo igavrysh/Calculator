@@ -81,7 +81,7 @@ struct CalculatorBrain {
     }
     
     var result: Double? {
-        get { return self.accumulator.value }
+        return self.accumulator.value
     }
     
     var description: String? {
@@ -89,9 +89,7 @@ struct CalculatorBrain {
     }
     
     var resultIsPending: Bool {
-        get {
-            return pendingBinaryOperation != nil
-        }
+        return pendingBinaryOperation != nil
     }
     
     // MARK: -
