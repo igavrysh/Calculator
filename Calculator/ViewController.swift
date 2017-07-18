@@ -11,16 +11,19 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var log: UILabel!
     
     var userIsInTheMiddleOfTyping = false
     
+    let decimalSymbol = "."
+    
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
-        
-        if digit == "." && (display.text?.range(of: ".") != nil) {
+
+        if display.text?.contains(decimalSymbol) == true && digit == decimalSymbol {
             return
         }
-        
+
         if userIsInTheMiddleOfTyping {
             let textCurrentlyInDisplay = display.text!
             display.text = textCurrentlyInDisplay + digit
@@ -62,6 +65,10 @@ class ViewController: UIViewController {
         
         if let result = brain.result {
             displayValue = result
+        }
+        
+        if let description = brain.description {
+            log.text = description
         }
     }
 
