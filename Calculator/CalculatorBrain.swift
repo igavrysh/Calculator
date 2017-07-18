@@ -14,6 +14,20 @@ func lift<A, B>(_ value: (A?, B?)) -> (A, B)? {
     }
 }
 
+func lift<A, B, C>(_ value: (A?, B?, C?)) -> (A, B, C)? {
+    return value.0.flatMap { lhs in
+        value.1.flatMap { mhs in
+            value.2.flatMap { (lhs, mhs, $0) }
+        }
+    }
+}
+
+extension Optional {
+    func `do`(execute: (Wrapped) -> ()) {
+        self.map(execute)
+    }
+}
+
 struct CalculatorBrain {
 
     private var accumulator: (value: Double?, desc: String?)
@@ -29,6 +43,7 @@ struct CalculatorBrain {
         "π" : Operation.constant(Double.pi),
         "e" : Operation.constant(M_E),
         "√" : Operation.unartyOperation(sqrt),
+        "1/" : Operation.unartyOperation({ 1 / $0}),
         "cos" : Operation.unartyOperation(cos),
         "sin" : Operation.unartyOperation(sin),
         "±" : Operation.unartyOperation({ -$0 }),
@@ -45,22 +60,24 @@ struct CalculatorBrain {
             switch operation {
             case .constant(let value):
                 accumulator = (value, "\(symbol)")
-                break
+                
             case .unartyOperation(let function):
-                if let acc = lift(accumulator) {
-                    accumulator = (function(acc.0), "\(symbol)(\(acc.1))")
+                lift(accumulator).do {
+                    accumulator = (function($0.0), "\(symbol)(\($0.1))")
                 }
+                
             case .binaryOperation(let function):
                 performPendingBinartyOperation()
                 
-                if let acc = lift(accumulator) {
+                lift(accumulator).do {
                     pendingBinaryOperation = PendingBinartyOperaion(function: function,
-                                                                    firstOperand: acc.0,
-                                                                    firstPartDescription: "\(acc.1)\(symbol)")
+                                                                    firstOperand: $0.0,
+                                                                    firstPartDescription: "\($0.1)\(symbol)")
                     accumulator = (nil, nil)
                 }
                 
                 break;
+                
             case .equals:
                 performPendingBinartyOperation();
             }
@@ -68,10 +85,9 @@ struct CalculatorBrain {
     }
     
     mutating private func performPendingBinartyOperation() {
-        if let pbo = pendingBinaryOperation, let acc = lift(accumulator)
-        {
-            accumulator = (pbo.perform(with: acc.0),
-                           "\(pbo.firstPartDescription)\(acc.1)")
+        lift((pendingBinaryOperation, accumulator.0, accumulator.1)).do {
+            accumulator = ($0.0.perform(with: $0.1),
+                           "\($0.0.firstPartDescription)\($0.2)")
             pendingBinaryOperation = nil
         }
     }
@@ -102,11 +118,13 @@ struct CalculatorBrain {
     
     var description: String? {
         get {
-            if let pbo = pendingBinaryOperation {
-                return "\(pbo.firstPartDescription)..."
+            var desc: String?
+            
+            pendingBinaryOperation.do {
+                desc = $0.firstPartDescription
             }
             
-            return accumulator.1
+            return desc != nil ? desc : accumulator.1
         }
     }
     

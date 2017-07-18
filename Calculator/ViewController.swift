@@ -68,7 +68,7 @@ class ViewController: UIViewController {
         }
         
         if let description = brain.description {
-            log.text = description
+            log.text = "\(description)\(brain.resultIsPending ? "..." : "=")"
         }
     }
 

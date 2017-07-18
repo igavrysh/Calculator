@@ -108,7 +108,7 @@
                                                         <rect key="frame" x="64" y="0.0" width="62.5" height="93.5"/>
                                                         <color key="backgroundColor" red="0.92341796880000004" green="0.92341796880000004" blue="0.92341796880000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="1/x"/>
+                                                        <state key="normal" title="1/"/>
                                                         <connections>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3x3-KJ-6OO"/>
                                                         </connections>
