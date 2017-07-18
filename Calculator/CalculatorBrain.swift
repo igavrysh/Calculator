@@ -8,6 +8,12 @@
 
 import Foundation
 
+func lift<A, B>(_ value: (A?, B?)) -> (A, B)? {
+    return value.0.flatMap { lhs in
+        value.1.flatMap { (lhs, $0) }
+    }
+}
+
 struct CalculatorBrain {
 
     private var accumulator: (value: Double?, desc: String?)
@@ -41,18 +47,16 @@ struct CalculatorBrain {
                 accumulator = (value, "\(symbol)")
                 break
             case .unartyOperation(let function):
-                if accumulator.value != nil && accumulator.desc != nil {
-                    accumulator = (function(accumulator.value!), "\(symbol)(\(accumulator.desc!))")
+                if let acc = lift(accumulator) {
+                    accumulator = (function(acc.0), "\(symbol)(\(acc.1))")
                 }
             case .binaryOperation(let function):
-                if accumulator.value != nil && accumulator.desc != nil {
-                    if pendingBinaryOperation != nil {
-                        performPendingBinartyOperation()
-                    }
-                    
+                performPendingBinartyOperation()
+                
+                if let acc = lift(accumulator) {
                     pendingBinaryOperation = PendingBinartyOperaion(function: function,
-                                                                    firstOperand: accumulator.value!,
-                                                                    firstPartDescription: "\(accumulator.desc!)\(symbol)")
+                                                                    firstOperand: acc.0,
+                                                                    firstPartDescription: "\(acc.1)\(symbol)")
                     accumulator = (nil, nil)
                 }
                 
@@ -64,12 +68,10 @@ struct CalculatorBrain {
     }
     
     mutating private func performPendingBinartyOperation() {
-        if pendingBinaryOperation != nil
-            && accumulator.value != nil
-            && accumulator.desc != nil
+        if let pbo = pendingBinaryOperation, let acc = lift(accumulator)
         {
-            accumulator = (pendingBinaryOperation!.perform(with: accumulator.value!),
-                           "\(pendingBinaryOperation!.firstPartDescription)\(accumulator.desc!)")
+            accumulator = (pbo.perform(with: acc.0),
+                           "\(pbo.firstPartDescription)\(acc.1)")
             pendingBinaryOperation = nil
         }
     }
@@ -100,11 +102,11 @@ struct CalculatorBrain {
     
     var description: String? {
         get {
-            if pendingBinaryOperation != nil {
-                return "\(pendingBinaryOperation!.firstPartDescription)..."
+            if let pbo = pendingBinaryOperation {
+                return "\(pbo.firstPartDescription)..."
             }
             
-            return "\(accumulator.desc ?? "")="
+            return accumulator.1
         }
     }
     
