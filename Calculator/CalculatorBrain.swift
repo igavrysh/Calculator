@@ -29,8 +29,9 @@ extension Optional {
 }
 
 struct CalculatorBrain {
-
-    private var accumulator: (value: Double?, desc: String?)
+    
+    // MARK: -
+    // MARK: Subtypes
     
     private enum Operation {
         case constant(Double)
@@ -39,7 +40,20 @@ struct CalculatorBrain {
         case equals
     }
     
-    private var operations: Dictionary<String, Operation> = [
+    private struct PendingBinartyOperaion {
+        let function: (Double, Double) -> Double
+        let firstOperand: Double
+        let firstPartDescription: String
+        
+        func perform(with secondOperand: Double) -> Double {
+            return function(firstOperand, secondOperand)
+        }
+    }
+    
+    // MARK: -
+    // MARK: Static
+    
+    private static let defaultOperations: [String: Operation] = [
         "π" : Operation.constant(Double.pi),
         "e" : Operation.constant(M_E),
         "√" : Operation.unartyOperation(sqrt),
@@ -54,83 +68,76 @@ struct CalculatorBrain {
         "^" : Operation.binaryOperation(pow),
         "=" : Operation.equals
     ]
-
-    mutating func performOperation(_ symbol: String) {
-        if let operation = operations[symbol] {
-            switch operation {
-            case .constant(let value):
-                accumulator = (value, "\(symbol)")
-                
-            case .unartyOperation(let function):
-                lift(accumulator).do {
-                    accumulator = (function($0.0), "\(symbol)(\($0.1))")
-                }
-                
-            case .binaryOperation(let function):
-                performPendingBinartyOperation()
-                
-                lift(accumulator).do {
-                    pendingBinaryOperation = PendingBinartyOperaion(function: function,
-                                                                    firstOperand: $0.0,
-                                                                    firstPartDescription: "\($0.1)\(symbol)")
-                    accumulator = (nil, nil)
-                }
-                
-                break;
-                
-            case .equals:
-                performPendingBinartyOperation();
-            }
-        }
-    }
     
-    mutating private func performPendingBinartyOperation() {
-        lift((pendingBinaryOperation, accumulator.0, accumulator.1)).do {
-            accumulator = ($0.0.perform(with: $0.1),
-                           "\($0.0.firstPartDescription)\($0.2)")
-            pendingBinaryOperation = nil
-        }
-    }
+    // MARK: -
+    // MARK: Properties
     
+    private var accumulator: (value: Double?, desc: String?)
+    private var operations = CalculatorBrain.defaultOperations
     private var pendingBinaryOperation: PendingBinartyOperaion?
-    
-    private struct PendingBinartyOperaion {
-        let function: (Double, Double) -> Double
-        let firstOperand: Double
-        let firstPartDescription: String
-        
-        
-        func perform(with secondOperand: Double) -> Double {
-            return function(firstOperand, secondOperand)
-        }
-    }
     
     mutating func setOperand(_ operand: Double) {
         accumulator = (operand, "\(operand)")
     }
     
     var result: Double? {
-        get {
-            let (v, _) = accumulator
-            return v
-        }
+        get { return self.accumulator.value }
     }
     
     var description: String? {
-        get {
-            var desc: String?
-            
-            pendingBinaryOperation.do {
-                desc = $0.firstPartDescription
-            }
-            
-            return desc != nil ? desc : accumulator.1
-        }
+        return self.pendingBinaryOperation?.firstPartDescription ?? self.accumulator.desc
     }
     
     var resultIsPending: Bool {
         get {
             return pendingBinaryOperation != nil
+        }
+    }
+    
+    // MARK: -
+    // MARK: Public
+
+    mutating func performOperation(_ symbol: String) {
+        var lifted = lift(self.accumulator).do
+        
+        self.operations[symbol].do {
+            switch $0 {
+            case .constant(let value): self.accumulator = (value, "\(symbol)")
+                
+            case .unartyOperation(let function):
+                lifted {
+                    self.accumulator = (function($0), "\(symbol)(\($1))")
+                }
+                
+            case .binaryOperation(let function):
+                self.performPendingBinartyOperation()
+                
+                lifted = lift(self.accumulator).do
+                
+                lifted {
+                    self.pendingBinaryOperation = PendingBinartyOperaion(
+                        function: function,
+                        firstOperand: $0,
+                        firstPartDescription: "\($1)\(symbol)"
+                    )
+                    
+                    self.accumulator = (nil, nil)
+                }
+                
+            case .equals: self.performPendingBinartyOperation();
+                
+            }
+        }
+    }
+    
+    // MARK: -
+    // MARK: Private
+    
+    mutating private func performPendingBinartyOperation() {
+        lift((self.pendingBinaryOperation, self.accumulator.value, self.accumulator.desc)).do {
+            self.accumulator = ($0.0.perform(with: $0.1),
+                                "\($0.0.firstPartDescription)\($0.2)")
+            pendingBinaryOperation = nil
         }
     }
 }
