@@ -128,6 +128,11 @@ struct CalculatorBrain {
         }
     }
     
+    mutating func clearBrain() {
+        self.accumulator = (nil, nil)
+        self.pendingBinaryOperation = nil
+    }
+    
     // MARK: -
     // MARK: Private
     

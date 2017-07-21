@@ -71,6 +71,12 @@ class ViewController: UIViewController {
             log.text = "\(description)\(brain.resultIsPending ? "..." : "=")"
         }
     }
-
+    
+    @IBAction func performClean(_ sender: UIButton) {
+        self.brain.clearBrain()
+        self.userIsInTheMiddleOfTyping = false
+        self.displayValue = 0
+        log.text = " "
+    }
 }
 

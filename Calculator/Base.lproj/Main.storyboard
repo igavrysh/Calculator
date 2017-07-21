@@ -51,7 +51,7 @@
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="C"/>
                                                         <connections>
-                                                            <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8f2-Y4-TF1"/>
+                                                            <action selector="performClean:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dnk-lu-ydq"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1U-cL-WT8">
