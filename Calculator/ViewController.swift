@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         }
         
         set {
-            display.text = String(newValue)
+            display.text = newValue.clean
         }
     }
     

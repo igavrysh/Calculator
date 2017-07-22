@@ -28,6 +28,14 @@ extension Optional {
     }
 }
 
+extension Double {
+    var clean: String {
+        return self.truncatingRemainder(dividingBy: 1) == 0
+            ? String(format: "%.0f", self)
+            : String(self)
+    }
+}
+
 struct CalculatorBrain {
     
     // MARK: -
@@ -77,7 +85,7 @@ struct CalculatorBrain {
     private var pendingBinaryOperation: PendingBinartyOperaion?
     
     mutating func setOperand(_ operand: Double) {
-        accumulator = (operand, "\(operand)")
+        accumulator = (operand, "\(operand.clean)")
     }
     
     var result: Double? {
@@ -138,8 +146,8 @@ struct CalculatorBrain {
     
     mutating private func performPendingBinartyOperation() {
         lift((self.pendingBinaryOperation, self.accumulator.value, self.accumulator.desc)).do {
-            self.accumulator = ($0.0.perform(with: $0.1),
-                                "\($0.0.firstPartDescription)\($0.2)")
+            self.accumulator = ($0.perform(with: $1),
+                                "\($0.firstPartDescription)\($2)")
             pendingBinaryOperation = nil
         }
     }
