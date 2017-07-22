@@ -78,5 +78,21 @@ class ViewController: UIViewController {
         self.displayValue = 0
         log.text = " "
     }
+    
+    @IBAction func performDelete(_ sender: UIButton) {
+        if var text = self.display.text {
+            text.remove(at: text.index(before: text.endIndex))
+            if (text.characters.last == ".") {
+                text.remove(at: text.index(before: text.endIndex))
+            }
+            
+            if (text.isEmpty) {
+                text = "0"
+                userIsInTheMiddleOfTyping = false
+            }
+            
+            self.display.text = text
+        }
+    }
 }
 
