@@ -28,11 +28,33 @@ extension Optional {
     }
 }
 
+extension NumberFormatter {
+    static var prettyFormat: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.usesGroupingSeparator = true
+        formatter.numberStyle = .decimal
+        
+        return formatter
+    }
+}
+
 extension Double {
-    var clean: String {
-        return self.truncatingRemainder(dividingBy: 1) == 0
-            ? String(format: "%.0f", self)
-            : String(self)
+    var prettyString: String {
+        let formatter = NumberFormatter.prettyFormat
+        formatter.maximumFractionDigits = self.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 6
+    
+        return formatter.string(from: NSNumber(value: self)) ?? ""
+    }
+}
+
+extension String {
+    var prettyDouble: Double {
+        let formatter = NumberFormatter.prettyFormat
+        
+        var formattedDouble: Double = 0
+        formatter.number(from: self).do { formattedDouble = $0.doubleValue }
+        
+        return formattedDouble
     }
 }
 
@@ -85,7 +107,7 @@ struct CalculatorBrain {
     private var pendingBinaryOperation: PendingBinartyOperaion?
     
     mutating func setOperand(_ operand: Double) {
-        accumulator = (operand, "\(operand.clean)")
+        accumulator = (operand, "\(operand.prettyString)")
     }
     
     var result: Double? {

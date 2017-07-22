@@ -20,28 +20,44 @@ class ViewController: UIViewController {
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
 
-        if display.text?.contains(decimalSymbol) == true && digit == decimalSymbol {
+        if self.touchedSequence?.contains(decimalSymbol) == true && digit == decimalSymbol {
             return
         }
 
         if userIsInTheMiddleOfTyping {
-            let textCurrentlyInDisplay = display.text!
-            display.text = textCurrentlyInDisplay + digit
+            self.touchedSequence = self.touchedSequence! + digit
         } else {
-            display.text = digit
+            self.touchedSequence = digit
             userIsInTheMiddleOfTyping = true
         }
         
         print("touchDigit was called \(digit)")
     }
     
-    var displayValue: Double {
+    var sequence: String?
+    
+    var touchedSequence: String? {
         get {
-            return Double(display.text!)!
+            return self.sequence
         }
         
         set {
-            display.text = newValue.clean
+            self.sequence = newValue
+            self.sequence.do {
+                Double($0).do {
+                    self.display.text = $0.prettyString
+                }
+            }
+        }
+    }
+    
+    var displayValue: Double {
+        get {
+            return Double(self.touchedSequence!)!
+        }
+        
+        set {
+            self.touchedSequence = String(newValue)
         }
     }
     
@@ -80,7 +96,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func performDelete(_ sender: UIButton) {
-        if var text = self.display.text {
+        if var text = self.touchedSequence {
             text.remove(at: text.index(before: text.endIndex))
             if (text.characters.last == ".") {
                 text.remove(at: text.index(before: text.endIndex))
@@ -91,7 +107,7 @@ class ViewController: UIViewController {
                 userIsInTheMiddleOfTyping = false
             }
             
-            self.display.text = text
+            self.touchedSequence = text
         }
     }
 }
