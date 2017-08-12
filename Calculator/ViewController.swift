@@ -20,7 +20,9 @@ class ViewController: UIViewController {
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
 
-        if self.touchedSequence?.contains(decimalSymbol) == true && digit == decimalSymbol {
+        if self.touchedSequence?.contains(decimalSymbol) == true
+            && digit == decimalSymbol
+        {
             return
         }
 
@@ -44,9 +46,7 @@ class ViewController: UIViewController {
         set {
             self.sequence = newValue
             self.sequence.do {
-                Double($0).do {
-                    self.display.text = $0.prettyString
-                }
+                self.display.text = $0.prettyDoubleInString
             }
         }
     }
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
         }
         
         set {
-            self.touchedSequence = String(newValue)
+            self.touchedSequence = newValue.stringWithoutInsignificantFractionDigits
         }
     }
     
@@ -97,6 +97,10 @@ class ViewController: UIViewController {
     
     @IBAction func performDelete(_ sender: UIButton) {
         if var text = self.touchedSequence {
+            if userIsInTheMiddleOfTyping == false {
+                performClean(UIButton())
+            }
+            
             text.remove(at: text.index(before: text.endIndex))
             if (text.characters.last == ".") {
                 text.remove(at: text.index(before: text.endIndex))
@@ -111,4 +115,3 @@ class ViewController: UIViewController {
         }
     }
 }
-

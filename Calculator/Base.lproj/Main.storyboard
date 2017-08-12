@@ -25,7 +25,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="D1b-qN-1Jo">
                                 <rect key="frame" x="1" y="21" width="318" height="546"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="yIU-Bf-vQG">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="headTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="yIU-Bf-vQG">
                                         <rect key="frame" x="0.0" y="0.0" width="318" height="24"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="20"/>
@@ -97,7 +97,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="63" height="77.5"/>
                                                         <color key="backgroundColor" red="0.92341796880000004" green="0.92341796880000004" blue="0.92341796880000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="−"/>
+                                                        <state key="normal" title="Ho"/>
                                                         <connections>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ulZ-re-9z6"/>
                                                         </connections>
@@ -124,7 +124,7 @@
                                                         <rect key="frame" x="191.5" y="0.0" width="62.5" height="77.5"/>
                                                         <color key="backgroundColor" red="0.92341796880000004" green="0.92341796880000004" blue="0.92341796880000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="÷"/>
+                                                        <state key="normal" title="×"/>
                                                         <connections>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="51E-0G-DcW"/>
                                                         </connections>
@@ -133,7 +133,7 @@
                                                         <rect key="frame" x="255" y="0.0" width="63" height="77.5"/>
                                                         <color key="backgroundColor" red="0.92341796880000004" green="0.92341796880000004" blue="0.92341796880000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="×"/>
+                                                        <state key="normal" title="÷"/>
                                                         <connections>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zzA-Yv-XFh"/>
                                                         </connections>
