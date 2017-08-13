@@ -107,6 +107,7 @@ struct CalculatorBrain {
         case constant(Double)
         case unartyOperation((Double) -> Double)
         case binaryOperation((Double, Double) -> Double)
+        case genOperation(() -> Double)
         case equals
     }
     
@@ -136,6 +137,7 @@ struct CalculatorBrain {
         "+" : Operation.binaryOperation({ $0 + $1 }),
         "÷" : Operation.binaryOperation({ $0 / $1 }),
         "^" : Operation.binaryOperation(pow),
+        "rand" : Operation.genOperation({ Double(arc4random())/Double(UInt32.max) }),
         "=" : Operation.equals
     ]
     
@@ -170,8 +172,12 @@ struct CalculatorBrain {
         
         self.operations[symbol].do {
             switch $0 {
-            case .constant(let value): self.accumulator = (value, "\(symbol)")
-                
+            case .constant(let value):
+                self.accumulator = (value, "\(symbol)")
+            
+            case .genOperation(let function):
+                self.accumulator = (function(), "\(symbol)")
+            
             case .unartyOperation(let function):
                 lifted {
                     self.accumulator = (function($0), "\(symbol)(\($1))")
