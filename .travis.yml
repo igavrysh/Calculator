@@ -1,0 +1,6 @@
+branches:
+  only:
+  - feature/home-assignment-1
+language: swift
+xcode_project: Calculator.xcodeproj # path to your xcodeproj folder
+xcode_scheme: Calculator
