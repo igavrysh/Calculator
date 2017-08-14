@@ -12,8 +12,8 @@ test:
     CODE_SIGN_IDENTITY=
     PROVISIONING_PROFILE=
     -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest'
-         -sdk iphonesimulator
-         -project Calculator.xcodeproj
-         -scheme "Calculator"
-         build build-tests run-tests
+      -sdk iphonesimulator
+      -project Calculator.xcodeproj
+      -scheme "Calculator"
+      build build-tests run-tests
 	
