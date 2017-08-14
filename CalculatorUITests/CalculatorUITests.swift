@@ -30,6 +30,21 @@ class CalculatorUITests: XCTestCase {
         super.tearDown()
     }
     
+    // touching . 1 should display 0.1
+    func testCaseDecimalPointCase1() {
+        self.app.buttons["decimalPoint"].tap()
+        self.app.buttons["one"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == "0.1")
+    }
+    
+    // touching . . 1 should display 0.1
+    func testCaseDecimalPointCase2() {
+        self.app.buttons["decimalPoint"].tap()
+        self.app.buttons["decimalPoint"].tap()
+        self.app.buttons["one"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == "0.1")
+    }
+    
     // a. touching 7 + would show “7 + ...” (with 7 still in the display)
     func testCaseA() {
         self.app.buttons["seven"].tap()

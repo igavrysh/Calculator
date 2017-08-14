@@ -20,6 +20,33 @@ class CalculatorTests: XCTestCase {
         super.tearDown()
     }
     
+    // touching 25 ± ± should display -25 and next 25
+    func testCaseChangeSign() {
+        self.brain.setOperand(25)
+        self.brain.performOperation("±")
+        XCTAssert(self.brain.result == -25)
+        XCTAssert(self.brain.description == "±(25)=")
+        self.brain.performOperation("±")
+        XCTAssert(self.brain.result == 25)
+        XCTAssert(self.brain.description == "±(±(25))=")
+    }
+    
+    // touching 25 √ should display 5
+    func testCaseSquaredRoot() {
+        self.brain.setOperand(25)
+        self.brain.performOperation("√")
+        XCTAssert(self.brain.description == "√(25)=")
+        XCTAssert(self.brain.result == 5)
+    }
+    
+    // touching 5 and 1/ should display 0.2 as a result and 1/(5)
+    func testCaseOneOver() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("1/")
+        XCTAssert(self.brain.description == "1/(5)=")
+        XCTAssert(self.brain.result == 0.2)
+    }
+    
     // a. touching 7 + would show “7 + ...” (with 7 still in the display)
     func testCaseA() {
         self.brain.setOperand(7)
