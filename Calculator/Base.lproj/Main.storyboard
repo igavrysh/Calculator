@@ -85,7 +85,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8e9-dz-oYd">
                                                         <rect key="frame" x="255" y="0.0" width="63" height="78"/>
                                                         <color key="backgroundColor" red="0.92341796880000004" green="0.92341796880000004" blue="0.92341796880000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <accessibility key="accessibilityConfiguration" identifier="removeOneInput" label="⬅︎"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="backspace" label="⬅︎"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="⬅︎"/>
                                                         <connections>
