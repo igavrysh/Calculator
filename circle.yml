@@ -11,7 +11,7 @@ test:
         PROVISIONING_PROFILE=
         -sdk iphonesimulator
         -destination 'platform=iOS Simulator,OS=latest,name=iPhone 7'
-        -project Calculator.xcworkspace
+        -project Calculator.xcodeproj
         -scheme "Calculator"
         clean build test |
       tee $CIRCLE_ARTIFACTS/xcode_raw.log |
