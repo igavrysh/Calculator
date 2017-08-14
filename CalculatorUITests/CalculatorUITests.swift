@@ -198,7 +198,7 @@ class CalculatorUITests: XCTestCase {
         self.app.buttons["multiply"].tap()
         self.app.buttons["π"].tap()
         self.app.buttons["equals"].tap()
-        XCTAssert((abs(Double(self.app.staticTexts["display"].label) ?? 0) - 12.566370) < 0.001)
+        XCTAssert((abs(Double(self.app.staticTexts["display"].label) ?? 0) - .pi * 4) < 0.001)
         XCTAssert(self.app.staticTexts["description"].label == "4×π=")
     }
     

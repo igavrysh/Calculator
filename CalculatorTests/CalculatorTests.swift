@@ -181,6 +181,58 @@ class CalculatorTests: XCTestCase {
         self.brain.performOperation("π")
         self.brain.performOperation("=")
         XCTAssert(self.brain.description == "4×π=")
-        XCTAssert(abs((self.brain.result ?? 0) - 12.5663706143592) < 0.01)
+        XCTAssert(abs((self.brain.result ?? 0) - 4 * .pi) < 0.01)
+    }
+    
+    // l. 5 × e = would show “5×e=“ (5 * .e)
+    func testCaseExponent() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("×")
+        self.brain.performOperation("e")
+        self.brain.performOperation("=")
+        XCTAssert(self.brain.description == "5×e=")
+        XCTAssert(abs((self.brain.result ?? 0) - (5.0 * M_E)) < 0.01)
+    }
+    
+    // m. 5 * π cos = would show “cos(5×π)=“ (5 * .e)
+    func testCaseCos() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("×")
+        self.brain.performOperation("π")
+        self.brain.performOperation("=")
+        self.brain.performOperation("cos")
+        XCTAssert(self.brain.description == "cos(5×π)=")
+        XCTAssert(abs((self.brain.result ?? 0) - cos(5 * .pi)) < 0.01)
+    }
+    
+    // n. 5 * π sin = would show “sin(5×π)=“ (5 * .e)
+    func testCaseSin() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("×")
+        self.brain.performOperation("π")
+        self.brain.performOperation("=")
+        self.brain.performOperation("sin")
+        XCTAssert(self.brain.description == "sin(5×π)=")
+        XCTAssert(abs((self.brain.result ?? 0) - sin(5 * .pi)) < 0.01)
+    }
+    
+    // o. 5 ^ 0 = would show “5^0=“ =0
+    func testCasePower1() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("^")
+        self.brain.setOperand(0)
+        self.brain.performOperation("=")
+        XCTAssert(self.brain.description == "5^0=")
+        XCTAssert(self.brain.result == 1)
+    }
+    
+    // r. 5 ^ 5 = would show “5^5=“ =125
+    func testCasePower2() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("^")
+        self.brain.setOperand(5)
+        self.brain.performOperation("=")
+        XCTAssert(self.brain.description == "5^5=")
+        XCTAssert(self.brain.result == pow(5.0, 5.0))
     }
 }
