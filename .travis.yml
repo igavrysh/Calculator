@@ -3,7 +3,7 @@ xcode_project: Calculator.xcodeproj
 xcode_scheme: Calculator
 osx_image: xcode8.3
 script:
-  - xcodebuild  -project Calculator.xcodeproj -scheme "Calculator" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3' test
+  - xcodebuild  -project Calculator.xcodeproj -scheme "Calculator" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' test
 branches:
   only:
   - feature/home-assignment-1
