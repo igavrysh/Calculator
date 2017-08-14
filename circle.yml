@@ -4,4 +4,4 @@ machine:
 
 test:
   override:
-    - ./bin/test
+    - ./bin/tests
