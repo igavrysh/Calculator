@@ -1,5 +1,5 @@
 # Calculator project
-[![CircleCI](https://circleci.com/gh/igavrysh/Calculator/tree/feature%2Fhome-assignment-1.svg?style=svg)](https://circleci.com/gh/igavrysh/Calculator/tree/feature%2Fhome-assignment-1)
+[![CircleCI](https://circleci.com/gh/igavrysh/Calculator/tree/feature%2Fhome-assignment-1.svg?style=shield)](https://circleci.com/gh/igavrysh/Calculator/tree/feature%2Fhome-assignment-1)
 [![TravisCI](https://travis-ci.org/igavrysh/Calculator.svg?branch=feature/home-assignment-1)](https://travis-ci.org/igavrysh/Calculator)
 
 ![General View](/img/screen1.png)
