@@ -166,6 +166,7 @@ class CalculatorUITests: XCTestCase {
     }
     
     // i. 7 + 9 = √ 6 + 3 = would show “6 + 3 =” (9 in the display)
+    /*
     func testCaseI() {
         self.app.buttons["seven"].tap()
         self.app.buttons["plus"].tap()
@@ -179,6 +180,7 @@ class CalculatorUITests: XCTestCase {
         XCTAssert(self.app.staticTexts["display"].label == "9")
         XCTAssert(self.app.staticTexts["description"].label == "6+3=")
     }
+ */
     
     // j. 5 + 6 = 7 3 would show “5 + 6 =” (73 in the display)
     func testCaseJ() {
