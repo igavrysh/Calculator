@@ -8,96 +8,6 @@
 
 import Foundation
 
-func lift<A, B>(_ value: (A?, B?)) -> (A, B)? {
-    return value.0.flatMap { lhs in
-        value.1.flatMap { (lhs, $0) }
-    }
-}
-
-func lift<A, B, C>(_ value: (A?, B?, C?)) -> (A, B, C)? {
-    return value.0.flatMap { lhs in
-        value.1.flatMap { mhs in
-            value.2.flatMap { (lhs, mhs, $0) }
-        }
-    }
-}
-
-extension Optional {
-    func `do`(execute: (Wrapped) -> ()) {
-        self.map(execute)
-    }
-}
-
-extension NumberFormatter {
-    static var prettyFormat: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.usesGroupingSeparator = true
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ","
-        
-        return formatter
-    }
-}
-
-extension Double {    
-    var prettyDescString: String {
-        let formatter = NumberFormatter.prettyFormat
-        formatter.maximumFractionDigits = self.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 6
-    
-        return formatter.string(from: NSNumber(value: self)) ?? ""
-    }
-    
-    var prettyDisplayString: String {
-        let formatter = NumberFormatter.prettyFormat
-        formatter.maximumFractionDigits = 20;
-        
-        return formatter.string(from: NSNumber(value: self)) ?? ""
-    }
-    
-    var stringWithoutInsignificantFractionDigits: String {
-        let formatter = NumberFormatter()
-        var string: String;
-        if self.truncatingRemainder(dividingBy: 1) == 0 {
-            formatter.maximumFractionDigits = 0
-            string = formatter.string(from: NSNumber(value: self)) ?? ""
-        } else {
-            string = String(self)
-        }
-        
-        return string
-    }
-}
-
-extension String {
-    var prettyDoubleInString: String {
-        let components = self.components(separatedBy: ".")
-        let firstPart = components[0]
-        let reversedCharacters = firstPart.characters.reversed()
-        var prettyDouble = ""
-        for (n, c) in reversedCharacters.enumerated() {
-            prettyDouble = String(c) + prettyDouble
-            if (n + 1) % 3 == 0 && n != reversedCharacters.count - 1  {
-                prettyDouble = "," + prettyDouble
-            }
-        }
-        
-        if (components.count == 2) {
-            prettyDouble = "\(prettyDouble).\(components[1])"
-        }
-        
-        return prettyDouble
-    }
-    
-    var prettyDouble: Double {
-        let formatter = NumberFormatter.prettyFormat
-        
-        var formattedDouble: Double = 0
-        formatter.number(from: self).do { formattedDouble = $0.doubleValue }
-        
-        return formattedDouble
-    }
-}
-
 struct CalculatorBrain {
     
     // MARK: -
@@ -157,7 +67,16 @@ struct CalculatorBrain {
     }
     
     var description: String? {
-        return self.pendingBinaryOperation?.firstPartDescription ?? self.accumulator.desc
+        
+        let desc = (self.pendingBinaryOperation?.firstPartDescription ?? "")
+            + (self.accumulator.desc ?? "")
+        
+        return  desc + "\(self.resultIsPending ? "..." : "=")"
+ /*
+        return (self.pendingBinaryOperation?.firstPartDescription ?? self.accumulator.desc).map {
+            $0 + "\(self.resultIsPending ? "..." : "=")"
+        }
+ */
     }
     
     var resultIsPending: Bool {

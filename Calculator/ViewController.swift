@@ -75,17 +75,11 @@ class ViewController: UIViewController {
             userIsInTheMiddleOfTyping = false
         }
         
-        if let mathematicalSymbol = sender.currentTitle {
-            brain.performOperation(mathematicalSymbol)
-        }
+        sender.currentTitle.do { self.brain.performOperation($0)}
         
-        if let result = brain.result {
-            displayValue = result
-        }
+        self.brain.result.do { self.displayValue = $0 }
         
-        if let description = brain.description {
-            log.text = "\(description)\(brain.resultIsPending ? "..." : "=")"
-        }
+        self.brain.description.do { log.text = $0 }
     }
     
     @IBAction func performClean(_ sender: UIButton) {
