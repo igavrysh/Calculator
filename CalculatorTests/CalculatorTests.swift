@@ -181,7 +181,7 @@ class CalculatorTests: XCTestCase {
         self.brain.performOperation("π")
         self.brain.performOperation("=")
         XCTAssert(self.brain.description == "4×π=")
-        XCTAssert(abs((self.brain.result ?? 0) - 4 * .pi) < 0.01)
+        XCTAssert(abs((self.brain.result ?? 0) - 4 * Double.pi) < 0.01)
     }
     
     // l. 5 × e = would show “5×e=“ (5 * .e)
@@ -202,7 +202,7 @@ class CalculatorTests: XCTestCase {
         self.brain.performOperation("=")
         self.brain.performOperation("cos")
         XCTAssert(self.brain.description == "cos(5×π)=")
-        XCTAssert(abs((self.brain.result ?? 0) - cos(5 * .pi)) < 0.01)
+        XCTAssert(abs((self.brain.result ?? 0) - cos(5 * Double.pi)) < 0.01)
     }
     
     // n. 5 * π sin = would show “sin(5×π)=“ (5 * .e)
@@ -213,7 +213,7 @@ class CalculatorTests: XCTestCase {
         self.brain.performOperation("=")
         self.brain.performOperation("sin")
         XCTAssert(self.brain.description == "sin(5×π)=")
-        XCTAssert(abs((self.brain.result ?? 0) - sin(5 * .pi)) < 0.01)
+        XCTAssert(abs((self.brain.result ?? 0) - sin(5 * Double.pi)) < 0.01)
     }
     
     // o. 5 ^ 0 = would show “5^0=“ =0
