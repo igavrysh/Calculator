@@ -30,15 +30,32 @@ class CalculatorUITests: XCTestCase {
         super.tearDown()
     }
     
-    // touching . 1 should display 0.1
+    // touching . 1 should display .1
     func testCaseDecimalPointCase1() {
+        self.app.buttons["decimalPoint"].tap()
+        self.app.buttons["one"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == ".1")
+    }
+    
+    // touching . . 1 should display .1
+    func testCaseDecimalPointCase2() {
+        self.app.buttons["decimalPoint"].tap()
+        self.app.buttons["decimalPoint"].tap()
+        self.app.buttons["one"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == ".1")
+    }
+    
+    // touching 0 . 1 should display 0.1
+    func testCaseDecimalPointCase3() {
+        self.app.buttons["zero"].tap()
         self.app.buttons["decimalPoint"].tap()
         self.app.buttons["one"].tap()
         XCTAssert(self.app.staticTexts["display"].label == "0.1")
     }
     
-    // touching . . 1 should display 0.1
-    func testCaseDecimalPointCase2() {
+    // touching 0 . . 1 should display 0.1
+    func testCaseDecimalPointCase4() {
+        self.app.buttons["zero"].tap()
         self.app.buttons["decimalPoint"].tap()
         self.app.buttons["decimalPoint"].tap()
         self.app.buttons["one"].tap()
