@@ -111,14 +111,14 @@ struct CalculatorBrain {
                     }
                     ??
                     (result:nil,
-                     description: " ")
+                     description: "")
             }
         }
         
         var ops = self.operations
         var oprnds = self.operands
         
-        var accumulator: (result: Double?, description: String) = (result: nil, description: " ")
+        var accumulator: (result: Double?, description: String) = (result: nil, description: "")
         var pendingBinaryOperation: PendingBinartyOperaion?
         
         func performPendingBinartyOperation(_ operation: inout PendingBinartyOperaion?) {
@@ -166,7 +166,7 @@ struct CalculatorBrain {
                                         description: accumulator.description + operationSymbol)
                         )
                         
-                        accumulator = (result: nil, description: " ")
+                        accumulator = (result: nil, description: "")
                         
                     case .equals:
                         moveOperandToAccumulatorIfNecessary()
