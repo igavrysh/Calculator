@@ -121,11 +121,11 @@ struct CalculatorBrain {
         var accumulator: (result: Double?, description: String) = (result: nil, description: "")
         var pendingBinaryOperation: PendingBinartyOperaion?
         
-        func performPendingBinartyOperation(_ operation: inout PendingBinartyOperaion?) {
-            operation.do { pbo in
+        func performPendingBinartyOperation() {
+            pendingBinaryOperation.do { pbo in
                 accumulator = pbo.perform(with: accumulator, variables: variables)
                 
-                operation = nil
+                pendingBinaryOperation = nil
             }
         }
         
@@ -158,7 +158,7 @@ struct CalculatorBrain {
                     case .binaryOperation(let function):
                         moveOperandToAccumulatorIfNecessary()
                         
-                        performPendingBinartyOperation(&pendingBinaryOperation)
+                        performPendingBinartyOperation()
                         
                         pendingBinaryOperation = PendingBinartyOperaion(
                             function: function,
@@ -171,7 +171,7 @@ struct CalculatorBrain {
                     case .equals:
                         moveOperandToAccumulatorIfNecessary()
                         
-                        performPendingBinartyOperation(&pendingBinaryOperation)
+                        performPendingBinartyOperation()
                     }
                 }
             }
