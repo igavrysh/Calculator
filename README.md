@@ -10,5 +10,6 @@
 * random operation
 * description label which indicates how the result shown on a display is derived
 * unit tests and UI tests
-* CircleCI integration
+* Circle CI/Travis CI integration for running tests
+* operand types: .variable and .value
 
