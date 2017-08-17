@@ -77,6 +77,12 @@ class ViewController: UIViewController {
         
         sender.currentTitle.do { self.brain.performOperation($0)}
         
+        //let res = self.brain.evaluate()
+        
+        ///self.displayValue = res.result ?? 0
+        
+        //self.log.text = res.description
+        
         self.brain.result.do { self.displayValue = $0 }
         
         self.brain.description.do { log.text = $0 }

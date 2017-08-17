@@ -8,16 +8,34 @@
 
 import Foundation
 
-struct Stack {
-    private var stackValues: [Any] = []
+struct Stack<T> {
+    private var values: [T] = []
     
-    mutating func push(_ value: Any) {
-        stackValues.insert(value, at: 0)
+    mutating func push(_ value: T) {
+        values.insert(value, at: 0)
     }
     
-    mutating func pop() -> Any? {
-        stackValues.remove(at: 0)
-        
-        return stackValues.first
+    mutating func pop() -> T? {
+        return values.remove(at: 0)
+    }
+}
+
+struct Queue<T> {
+    private var values: [T] = []
+    
+    mutating func enqueue(_ value: T) {
+        self.values.append(value)
+    }
+    
+    mutating func dequeue() -> T? {
+        return self.isEmpty ? nil : self.values.removeFirst()
+    }
+    
+    var isEmpty: Bool {
+        return self.values.isEmpty
+    }
+    
+    var count: Int {
+        return self.values.count
     }
 }

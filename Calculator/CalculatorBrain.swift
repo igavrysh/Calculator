@@ -21,13 +21,26 @@ struct CalculatorBrain {
         case equals
     }
     
-    private struct PendingBinartyOperaion {
-        let function: (Double, Double) -> Double
-        let firstOperand: Double
-        let firstPartDescription: String
+    private enum Operand {
+        case value(Double)
+        case variable(String)
         
-        func perform(with secondOperand: Double) -> Double {
-            return function(firstOperand, secondOperand)
+        func double(with variables: [String: Double]?) -> Double {
+            switch self {
+            case .value(let value):
+                return value
+            case .variable(let name):
+                return variables?[name] ?? 0
+            }
+        }
+        
+        var description: String {
+            switch self {
+            case .value(let val):
+                return "\(val.stringWithoutInsignificantFractionDigits)"
+            case .variable(let variable):
+                return variable
+            }
         }
     }
     
@@ -53,89 +66,125 @@ struct CalculatorBrain {
     
     // MARK: -
     // MARK: Properties
-    
-    private var accumulator: (value: Double?, desc: String?)
-    private var operations = CalculatorBrain.defaultOperations
-    private var pendingBinaryOperation: PendingBinartyOperaion?
+    private var availableOperations = CalculatorBrain.defaultOperations
+    private var operands: Queue<Operand> = Queue()
+    private var operations: Queue<String> = Queue()
     
     mutating func setOperand(_ operand: Double) {
-        accumulator = (operand, "\(operand.prettyDescString)")
+        self.operands.enqueue(Operand.value(operand))
+    }
+    
+    mutating func setOperand(variable named: String) {
+        self.operands.enqueue(Operand.variable(named))
     }
     
     var result: Double? {
-        return self.accumulator.value ?? self.pendingBinaryOperation?.firstOperand;
+        return self.evaluate().result
     }
     
     var description: String? {
-        
-        let desc = (self.pendingBinaryOperation?.firstPartDescription ?? "")
-            + (self.accumulator.desc ?? "")
-        
-        return  desc + "\(self.resultIsPending ? "..." : "=")"
- /*
-        return (self.pendingBinaryOperation?.firstPartDescription ?? self.accumulator.desc).map {
-            $0 + "\(self.resultIsPending ? "..." : "=")"
-        }
- */
+        return  self.evaluate().description + "\(self.resultIsPending ? "..." : "=")"
     }
     
     var resultIsPending: Bool {
-        return pendingBinaryOperation != nil
+        return self.evaluate().isPending
     }
     
     // MARK: -
     // MARK: Public
 
     mutating func performOperation(_ symbol: String) {
-        var lifted = lift(self.accumulator).do
-        
-        self.operations[symbol].do {
-            switch $0 {
-            case .constant(let value):
-                self.accumulator = (value, "\(symbol)")
+        self.operations.enqueue(symbol)
+    }
+    
+    func evaluate(using variables: Dictionary<String, Double>? = nil) -> (result: Double?, isPending: Bool, description: String) {
+        struct PendingBinartyOperaion {
+            let function: (Double, Double) -> Double
+            let firstPart: (result: Double?, description: String)
             
-            case .genOperation(let function):
-                self.accumulator = (function(), "\(symbol)")
-            
-            case .unartyOperation(let function):
-                lifted {
-                    self.accumulator = (function($0), "\(symbol)(\($1))")
-                }
-                
-            case .binaryOperation(let function):
-                self.performPendingBinartyOperation()
-                
-                lifted = lift(self.accumulator).do
-                
-                lifted {
-                    self.pendingBinaryOperation = PendingBinartyOperaion(
-                        function: function,
-                        firstOperand: $0,
-                        firstPartDescription: "\($1)\(symbol)"
-                    )
-                    
-                    self.accumulator = (nil, nil)
-                }
-                
-            case .equals: self.performPendingBinartyOperation();
-                
+            func perform(with secondPart: (result: Double?, description: String),
+                         variables: [String: Double]?) -> (result: Double?, description: String)
+            {
+                return lift((firstPart.result, secondPart.result)).map {
+                    (result: function($0, $1),
+                     description: "\(firstPart.description)\(secondPart.description)")
+                    }
+                    ??
+                    (result:nil,
+                     description: " ")
             }
         }
+        
+        var ops = self.operations
+        var oprnds = self.operands
+        
+        var accumulator: (result: Double?, description: String) = (result: nil, description: " ")
+        var pendingBinaryOperation: PendingBinartyOperaion?
+        
+        func performPendingBinartyOperation(_ operation: inout PendingBinartyOperaion?) {
+            operation.do { pbo in
+                accumulator = pbo.perform(with: accumulator, variables: variables)
+                
+                operation = nil
+            }
+        }
+        
+        func moveOperandToAccumulatorIfNecessary() {
+            if accumulator.result == nil {
+                oprnds.dequeue().do {
+                    accumulator = (result:$0.double(with: variables),
+                                   description:$0.description)
+                }
+            }
+        }
+        
+        repeat {
+            ops.dequeue().map { (operationSymbol: String) in
+                self.availableOperations[operationSymbol].do {
+                    switch $0 {
+                    case .constant(let value):
+                        accumulator = (result: value, description: "\(operationSymbol)")
+                        
+                    case .genOperation(let function):
+                        accumulator = (result: function(), description: "\(operationSymbol)")
+                        
+                    case .unartyOperation(let function):
+                        moveOperandToAccumulatorIfNecessary()
+                        
+                        lift(accumulator).do {
+                            accumulator = (result: function($0), description: "\(operationSymbol)(\($1))")
+                        }
+                        
+                    case .binaryOperation(let function):
+                        moveOperandToAccumulatorIfNecessary()
+                        
+                        performPendingBinartyOperation(&pendingBinaryOperation)
+                        
+                        pendingBinaryOperation = PendingBinartyOperaion(
+                            function: function,
+                            firstPart: (result: accumulator.result,
+                                        description: accumulator.description + operationSymbol)
+                        )
+                        
+                        accumulator = (result: nil, description: " ")
+                        
+                    case .equals:
+                        moveOperandToAccumulatorIfNecessary()
+                        
+                        performPendingBinartyOperation(&pendingBinaryOperation)
+                    }
+                }
+            }
+        } while !ops.isEmpty
+        
+        return (result: accumulator.result ?? pendingBinaryOperation?.firstPart.result,
+                isPending: pendingBinaryOperation != nil,
+                description: (pendingBinaryOperation?.firstPart.description ?? "") + accumulator.description
+        )
     }
     
     mutating func clearBrain() {
-        self.accumulator = (nil, nil)
-        self.pendingBinaryOperation = nil
-    }
-    
-    // MARK: -
-    // MARK: Private
-    
-    mutating private func performPendingBinartyOperation() {
-        lift((self.pendingBinaryOperation, self.accumulator.value, self.accumulator.desc)).do {
-            self.accumulator = ($0.perform(with: $1),
-                                "\($0.firstPartDescription)\($2)")
-            pendingBinaryOperation = nil
-        }
+        self.operands = Queue()
+        self.operations = Queue()
     }
 }

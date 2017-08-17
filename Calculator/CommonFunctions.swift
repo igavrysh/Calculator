@@ -21,3 +21,9 @@ func lift<A, B, C>(_ value: (A?, B?, C?)) -> (A, B, C)? {
         }
     }
 }
+
+func lift<A, B>(_ value: (A?, B)) -> (A, B)? {
+    return value.0.flatMap { lhs in
+        (lhs, value.1)
+    }
+}
