@@ -54,12 +54,11 @@
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1U-cL-WT8">
                                                         <rect key="frame" x="203" y="0.0" width="202" height="211"/>
-                                                        <accessibility key="accessibilityConfiguration" identifier="enterVariableValue" label="→M"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="setVariableValue" label="→M"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="→M"/>
                                                         <connections>
                                                             <action selector="inputVariable:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N0M-zT-cce"/>
-                                                            <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NUa-Ly-wDU"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AGJ-yo-lLf">

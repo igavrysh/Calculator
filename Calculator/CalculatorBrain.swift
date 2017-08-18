@@ -195,8 +195,8 @@ struct CalculatorBrain {
     // MARK: Private
     
     private mutating func addOperand(_ operand: Operand) {
-        self.operations.last.do {
-            if $0 == "=" {
+        self.operations.last.do { _ in
+            if !evaluate().isPending {
                 clearBrain()
             }
         }

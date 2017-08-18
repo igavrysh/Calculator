@@ -131,6 +131,8 @@ class ViewController: UIViewController {
         
         self.variables = ["M": self.displayValue]
         
+        self.userIsInTheMiddleOfTyping = false
+        
         process()
     }
 }
