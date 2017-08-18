@@ -76,14 +76,9 @@ class ViewController: UIViewController {
     private var brain = CalculatorBrain()
     
     private func process() {
-        self.brain.description.do { log.text = $0 }
-        self.brain.result.do { self.displayValue = $0 }
-        
-        /*
         let expression = self.brain.evaluate(using: self.variables)
         expression.result.do {  self.displayValue = $0  }
         log.text = expression.description
-         */
     }
     
     @IBAction func performOperation(_ sender: UIButton) {

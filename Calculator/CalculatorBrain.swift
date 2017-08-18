@@ -83,7 +83,7 @@ struct CalculatorBrain {
     }
     
     var description: String? {
-        return evaluate().description + "\(self.resultIsPending ? "..." : "=")"
+        return evaluate().description
     }
     
     var resultIsPending: Bool {
@@ -129,7 +129,7 @@ struct CalculatorBrain {
             }
         }
         
-        func moveOperandToAccumulatorIfNecessary() {
+        func fetchOperand() {
             if accumulator.result == nil {
                 oprnds.dequeue().do {
                     accumulator = (result:$0.double(with: variables),
@@ -149,14 +149,14 @@ struct CalculatorBrain {
                         accumulator = (result: function(), description: "\(operationSymbol)")
                         
                     case .unartyOperation(let function):
-                        moveOperandToAccumulatorIfNecessary()
+                        fetchOperand()
                         
                         lift(accumulator).do {
                             accumulator = (result: function($0), description: "\(operationSymbol)(\($1))")
                         }
                         
                     case .binaryOperation(let function):
-                        moveOperandToAccumulatorIfNecessary()
+                        fetchOperand()
                         
                         performPendingBinartyOperation(&pendingBinaryOperation)
                         
@@ -169,7 +169,7 @@ struct CalculatorBrain {
                         accumulator = (result: nil, description: "")
                         
                     case .equals:
-                        moveOperandToAccumulatorIfNecessary()
+                        fetchOperand()
                         
                         performPendingBinartyOperation(&pendingBinaryOperation)
                     }
@@ -179,7 +179,10 @@ struct CalculatorBrain {
         
         return (result: accumulator.result ?? pendingBinaryOperation?.firstPart.result,
                 isPending: pendingBinaryOperation != nil,
-                description: (pendingBinaryOperation?.firstPart.description ?? "") + accumulator.description
+                description: (pendingBinaryOperation?.firstPart.description ?? "")
+                    + accumulator.description
+                    + "\(pendingBinaryOperation != nil ? "..." : "=")"
+                    
         )
     }
     

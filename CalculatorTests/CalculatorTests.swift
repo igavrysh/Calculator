@@ -149,7 +149,7 @@ class CalculatorTests: XCTestCase {
     }
     
     // i. 7 + 9 = √ 6 + 3 = would show “6 + 3 =” (9 in the display)
-    func _testCaseI() {
+    func testCaseI() {
         self.brain.setOperand(7)
         self.brain.performOperation("+")
         self.brain.setOperand(9)
@@ -234,5 +234,44 @@ class CalculatorTests: XCTestCase {
         self.brain.performOperation("=")
         XCTAssert(self.brain.description == "5^5=")
         XCTAssert(self.brain.result == pow(5.0, 5.0))
+    }
+    
+    // 9 + M = √ ⇒ description is √(9+M), display is 3 because M is not set (thus 0.0).
+    func testCaseAddVariableOperand() {
+        self.brain.setOperand(9)
+        self.brain.performOperation("+")
+        self.brain.setOperand(variable: "M")
+        self.brain.performOperation("=")
+        self.brain.performOperation("√")
+        XCTAssert(self.brain.description == "√(9+M)=")
+        XCTAssert(self.brain.result == 3)
+    }
+    
+    // 9 + M = √ , 7 →M, ⇒ description is √(9+M), display is 4 because M is set now to 7.
+    func testCaseSetVariableValue() {
+        self.brain.setOperand(9)
+        self.brain.performOperation("+")
+        self.brain.setOperand(variable: "M")
+        self.brain.performOperation("=")
+        self.brain.performOperation("√")
+        let evalResult = self.brain.evaluate(using: ["M": Double(7.0)])
+        XCTAssert(evalResult.description == "√(9+M)=")
+        XCTAssert(evalResult.result == 4)
+    }
+    
+    // 9 + M = √ , 7 →M, + 14 ⇒ display now shows 18, description is now √(9+M)+14
+    func testCaseAddConstToVariableExpression() {
+        self.brain.setOperand(9)
+        self.brain.performOperation("+")
+        self.brain.setOperand(variable: "M")
+        self.brain.performOperation("=")
+        self.brain.performOperation("√")
+        _ = self.brain.evaluate(using: ["M": Double(7.0)])
+        self.brain.performOperation("+")
+        self.brain.setOperand(14)
+        self.brain.performOperation("=")
+        let finalEvalResult = self.brain.evaluate(using: ["M": Double(7.0)])
+        XCTAssert(finalEvalResult.description == "√(9+M)+14=")
+        XCTAssert(finalEvalResult.result == 18)
     }
 }

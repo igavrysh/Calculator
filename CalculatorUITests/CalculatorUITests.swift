@@ -166,7 +166,7 @@ class CalculatorUITests: XCTestCase {
     }
     
     // i. 7 + 9 = √ 6 + 3 = would show “6 + 3 =” (9 in the display)
-    func _testCaseI() {
+    func testCaseI() {
         self.app.buttons["seven"].tap()
         self.app.buttons["plus"].tap()
         self.app.buttons["nine"].tap()
@@ -267,5 +267,29 @@ class CalculatorUITests: XCTestCase {
         self.app.buttons["backspace"].tap()
         XCTAssert(self.app.staticTexts["display"].label == "0")
         XCTAssert(self.app.staticTexts["description"].label.replacingOccurrences(of: " ", with: "") == "")
+    }
+    
+    // 9 + M = √ ⇒ description is √(9+M), display is 3 because M is not set (thus 0.0)
+    // 7 →M ⇒ display now shows 4 (the square root of 16), description is still √(9+M)
+    // + 14 = ⇒ display now shows 18, description is now √(9+M)+14
+    func testVariableInjection() {
+        self.app.buttons["nine"].tap()
+        self.app.buttons["plus"].tap()
+        self.app.buttons["addVariableOperand"].tap()
+        self.app.buttons["equals"].tap()
+        self.app.buttons["squaredRoot"].tap()
+        self.app.buttons["equals"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == "3")
+        XCTAssert(self.app.staticTexts["description"].label == "√(9+M)=")
+        self.app.buttons["seven"].tap()
+        self.app.buttons["setVariableValue"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == "4")
+        XCTAssert(self.app.staticTexts["description"].label == "√(9+M)=")
+        self.app.buttons["plus"].tap()
+        self.app.buttons["one"].tap()
+        self.app.buttons["four"].tap()
+        self.app.buttons["equals"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == "18")
+        XCTAssert(self.app.staticTexts["description"].label == "√(9+M)+14=")
     }
 }
