@@ -295,4 +295,14 @@ class CalculatorUITests: XCTestCase {
         XCTAssert(self.app.staticTexts["display"].label == "18")
         XCTAssert(self.app.staticTexts["description"].label == "√(9+M)+14=")
     }
+    
+    // M cos π then →M, then ⬅︎ => now your calculator will show the value of cos(M) which should be -1
+    func testUndoCase() {
+        self.app.buttons["addVariableOperand"].tap()
+        self.app.buttons["cosinus"].tap()
+        self.app.buttons["pi"].tap()
+        self.app.buttons["backspace"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == "-1")
+        XCTAssert(self.app.staticTexts["description"].label == "cos(M)")
+    }
 }
