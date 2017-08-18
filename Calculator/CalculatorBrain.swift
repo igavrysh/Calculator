@@ -177,7 +177,15 @@ struct CalculatorBrain {
             }
         } while !ops.isEmpty
         
-        return (result: accumulator.result ?? pendingBinaryOperation?.firstPart.result,
+        if !oprnds.isEmpty {
+            fetchOperand()
+            
+            performPendingBinartyOperation(&pendingBinaryOperation)
+        }
+        
+        return (result: accumulator.result
+                    //?? oprnds.dequeue()?.double(with: variables)
+                    ?? pendingBinaryOperation?.firstPart.result,
                 isPending: pendingBinaryOperation != nil,
                 description: (pendingBinaryOperation?.firstPart.description ?? "")
                     + accumulator.description
@@ -189,6 +197,31 @@ struct CalculatorBrain {
     mutating func clearBrain() {
         self.operands = Queue()
         self.operations = Queue()
+    }
+    
+    mutating func undo() {
+        if self.resultIsPending {
+            _ = self.operations.removeLast()
+            
+            return
+        }
+        
+        if self.operations.isEmpty && !self.operands.isEmpty {
+            self.operands = Queue()
+        }
+
+        self.operations.removeLast().do { operationSymbol in
+            self.availableOperations[operationSymbol].do {
+                switch $0 {
+                case .equals:
+                    undo()
+                case .binaryOperation(_):
+                    self.operations.enqueue(operationSymbol)
+                    _ = self.operands.removeLast()
+                default: break
+                }
+            }
+        }
     }
     
     // MARK: -

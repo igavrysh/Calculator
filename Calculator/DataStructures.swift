@@ -31,6 +31,15 @@ struct Queue<T> {
         return self.isEmpty ? nil : self.values.removeFirst()
     }
     
+    mutating func removeLast() -> T? {
+        return self.isEmpty ? nil : self.values.removeLast()
+    }
+
+    mutating func addFirst(_ value: T) {
+        self.values.insert(value, at: 0)
+    }
+    
+    
     var isEmpty: Bool {
         return self.values.isEmpty
     }

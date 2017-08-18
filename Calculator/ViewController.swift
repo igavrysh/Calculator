@@ -20,6 +20,10 @@ class ViewController: UIViewController {
     
     var variables: [String: Double]?
     
+    override func viewDidLoad() {
+        //self.touchedSequence = "0"
+    }
+    
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
 
@@ -78,8 +82,17 @@ class ViewController: UIViewController {
     
     private func process() {
         let expression = self.brain.evaluate(using: self.variables)
-        expression.result.do {  self.displayValue = $0  }
-        log.text = expression.description
+        
+        guard let result = expression.result else {
+            self.touchedSequence = "0"
+            self.log.text  = " "
+            self.userIsInTheMiddleOfTyping = false
+            
+            return
+        }
+        
+        self.displayValue = result
+        self.log.text = expression.description
     }
     
     private func addVariable(name: String, value: Double) {
@@ -114,11 +127,16 @@ class ViewController: UIViewController {
     }
     
     @IBAction func performDelete(_ sender: UIButton) {
-        if var text = self.touchedSequence {
-            if userIsInTheMiddleOfTyping == false {
-                performClean(UIButton())
-            }
+        if userIsInTheMiddleOfTyping == false {
+            self.brain.undo()
             
+            process()
+            
+            return
+        }
+        
+        
+        if var text = self.touchedSequence {
             text.remove(at: text.index(before: text.endIndex))
             if (text.characters.last == ".") {
                 text.remove(at: text.index(before: text.endIndex))

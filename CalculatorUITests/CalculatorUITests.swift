@@ -223,7 +223,7 @@ class CalculatorUITests: XCTestCase {
     
     // touching backspace in binary operation second operand input
     // 7 + 123 ⬅︎ => (display: 12; desc: "7+...") ⬅︎ => (display: 1; desc: "7+...") ⬅︎ => (display: 0; desc: "7+...")
-    // ⬅︎ => (display: 0; desc: "")
+    // ⬅︎ => (display: 7; desc: "7=")  ⬅︎ => (display: 0; desc: "")
     func testBackspaceCase2() {
         self.app.buttons["seven"].tap()
         self.app.buttons["plus"].tap()
@@ -242,13 +242,16 @@ class CalculatorUITests: XCTestCase {
         XCTAssert(self.app.staticTexts["display"].label == "0")
         XCTAssert(self.app.staticTexts["description"].label == "7+...")
         self.app.buttons["backspace"].tap()
+        XCTAssert(self.app.staticTexts["display"].label == "7")
+        XCTAssert(self.app.staticTexts["description"].label == "7=")
+        self.app.buttons["backspace"].tap()
         XCTAssert(self.app.staticTexts["display"].label == "0")
         XCTAssert(self.app.staticTexts["description"].label.replacingOccurrences(of: " ", with: "") == "")
     }
     
     // touching backspace after equals is pressed
-    // 7 + 123 = ⬅︎ => (display: 12; desc: "7+...") ⬅︎ => (display: 1; desc: "7+...") ⬅︎ => (display: 0; desc: "7+...")
-    // ⬅︎ => (display: 0; desc: "")
+    // 7 + 123 = ⬅︎ => (display: 12; desc: "7+...") ⬅︎ => (display: 1; desc: "7+...") ⬅︎ => (display: 7; desc: "7+...")
+    // ⬅︎ => (display: 7; desc: "7=") ⬅︎ => (display: 0; desc: "")
     func testBackspaceCase3() {
         self.app.buttons["seven"].tap()
         self.app.buttons["plus"].tap()
@@ -259,11 +262,11 @@ class CalculatorUITests: XCTestCase {
         XCTAssert(self.app.staticTexts["display"].label == "130")
         XCTAssert(self.app.staticTexts["description"].label == "7+123=")
         self.app.buttons["backspace"].tap()
-        XCTAssert(self.app.staticTexts["display"].label == "13")
-        XCTAssert(self.app.staticTexts["description"].label.replacingOccurrences(of: " ", with: "") == "")
+        XCTAssert(self.app.staticTexts["display"].label == "7")
+        XCTAssert(self.app.staticTexts["description"].label == "7+...")
         self.app.buttons["backspace"].tap()
-        XCTAssert(self.app.staticTexts["display"].label == "1")
-        XCTAssert(self.app.staticTexts["description"].label.replacingOccurrences(of: " ", with: "") == "")
+        XCTAssert(self.app.staticTexts["display"].label == "7")
+        XCTAssert(self.app.staticTexts["description"].label == "7=")
         self.app.buttons["backspace"].tap()
         XCTAssert(self.app.staticTexts["display"].label == "0")
         XCTAssert(self.app.staticTexts["description"].label.replacingOccurrences(of: " ", with: "") == "")
