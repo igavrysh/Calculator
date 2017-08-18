@@ -8,6 +8,9 @@
 
 import UIKit
 
+let variableName = "M"
+let decimalSymbol = "."
+
 class ViewController: UIViewController {
     
     @IBOutlet weak var display: UILabel!
@@ -16,8 +19,6 @@ class ViewController: UIViewController {
     var userIsInTheMiddleOfTyping = false
     
     var variables: [String: Double]?
-    
-    let decimalSymbol = "."
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
@@ -81,6 +82,18 @@ class ViewController: UIViewController {
         log.text = expression.description
     }
     
+    private func addVariable(name: String, value: Double) {
+        if (self.variables == nil) {
+            self.variables = [:]
+        }
+        
+        self.variables?[name] = value
+        
+        self.userIsInTheMiddleOfTyping = false
+        
+        process()
+    }
+    
     @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping {
             brain.setOperand(displayValue)
@@ -122,17 +135,46 @@ class ViewController: UIViewController {
     
     @IBAction func touchVariable(_ sender: UIButton) {
         
-        self.brain.setOperand(variable: "M")
+        self.brain.setOperand(variable: variableName)
         
-        self.display.text = "M"
+        self.display.text = variableName
     }
     
     @IBAction func inputVariable(_ sender: UIButton) {
+        addVariable(name: variableName, value: self.displayValue)
+    }
+    
+    @IBAction func varaiblesListLongPress(_ sender: UILongPressGestureRecognizer) {
+        print("varaibles list long press")
         
-        self.variables = ["M": self.displayValue]
-        
-        self.userIsInTheMiddleOfTyping = false
-        
-        process()
+        sender.view.do { view in
+            let alertController = UIAlertController(
+                title: "Variable",
+                message: variableName + "=",
+                preferredStyle: UIAlertControllerStyle.alert
+            )
+            
+            alertController.popoverPresentationController?.sourceView = view
+            alertController.popoverPresentationController?.sourceRect =  view.bounds
+            
+            let okAction = UIAlertAction(
+                title: "OK",
+                style: UIAlertActionStyle.default,
+                handler: { (alert :UIAlertAction!) in
+                    alertController.textFields?[0].text.do { [weak self] textValue in
+                        self.do { $0.addVariable(name: variableName, value: Double(textValue) ?? 0.0) }
+                    }
+            }
+            )
+            
+            alertController.addTextField(configurationHandler: { textField in
+                textField.text = String(self.variables?[variableName] ?? 0.0)
+                textField.textAlignment = .center
+            })
+            
+            alertController.addAction(okAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
     }
 }

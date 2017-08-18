@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="ipad12_9" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -19,21 +19,21 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="D1b-qN-1Jo">
-                                <rect key="frame" x="5" y="21" width="1014" height="1344"/>
+                                <rect key="frame" x="5" y="21" width="404" height="714"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="headTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="yIU-Bf-vQG">
-                                        <rect key="frame" x="0.0" y="0.0" width="1014" height="24"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="404" height="24"/>
                                         <accessibility key="accessibilityConfiguration" identifier="description"/>
                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="44c-km-tNJ">
-                                        <rect key="frame" x="0.0" y="25" width="1014" height="48"/>
+                                        <rect key="frame" x="0.0" y="25" width="404" height="48"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <accessibility key="accessibilityConfiguration" identifier="display"/>
                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="40"/>
@@ -41,29 +41,31 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="77U-6U-6Ep">
-                                        <rect key="frame" x="0.0" y="74" width="1014" height="1270"/>
+                                        <rect key="frame" x="0.0" y="74" width="404" height="640"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="YHx-rV-Y32">
-                                                <rect key="frame" x="0.0" y="0.0" width="1014" height="211"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="404" height="106"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYT-wg-cdG">
-                                                        <rect key="frame" x="0.0" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="showGraph" label="graph"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="⏈"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1U-cL-WT8">
-                                                        <rect key="frame" x="203" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="81" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="setVariableValue" label="→M"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="→M"/>
                                                         <connections>
                                                             <action selector="inputVariable:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N0M-zT-cce"/>
+                                                            <outletCollection property="gestureRecognizers" destination="XDE-0G-Ncs" appends="YES" id="nVK-mb-ToN"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AGJ-yo-lLf">
-                                                        <rect key="frame" x="406" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="162" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="addVariableOperand" label="M"/>
+                                                        <gestureRecognizers/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="M"/>
                                                         <connections>
@@ -71,7 +73,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AMs-X6-lwH">
-                                                        <rect key="frame" x="609" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="243" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="clearAllInputs" label="C"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="C"/>
@@ -80,7 +82,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8e9-dz-oYd">
-                                                        <rect key="frame" x="812" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="324" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="backspace" label="⬅︎"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="⬅︎"/>
@@ -91,10 +93,10 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="IOs-V8-pOb">
-                                                <rect key="frame" x="0.0" y="212" width="1014" height="210.5"/>
+                                                <rect key="frame" x="0.0" y="107" width="404" height="105.66666666666669"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eaE-yj-zwl">
-                                                        <rect key="frame" x="0.0" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="randomDecimalBetweenZeroAndOne" label="rand"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="rand"/>
@@ -103,7 +105,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oRn-oE-Gm8">
-                                                        <rect key="frame" x="203" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="81" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="plus" label="+"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="+"/>
@@ -112,7 +114,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ub-1da">
-                                                        <rect key="frame" x="406" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="162" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="minus" label="-"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="−"/>
@@ -121,7 +123,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NK-ih-efI">
-                                                        <rect key="frame" x="609" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="243" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="multiply" label="×"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="×"/>
@@ -130,7 +132,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SzB-l6-clo">
-                                                        <rect key="frame" x="812" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="324" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="divide" label="÷"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="÷"/>
@@ -141,10 +143,10 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="yBM-aZ-rxf">
-                                                <rect key="frame" x="0.0" y="423.5" width="1014" height="211"/>
+                                                <rect key="frame" x="0.0" y="213.66666666666669" width="404" height="106"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tvQ-2v-ITY">
-                                                        <rect key="frame" x="0.0" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="exponent" label="e"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="e"/>
@@ -153,7 +155,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUk-m1-cXe">
-                                                        <rect key="frame" x="203" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="81" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="oneOverArgument" label="1/"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="1/"/>
@@ -162,7 +164,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zT2-bE-kbQ">
-                                                        <rect key="frame" x="406" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="162" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="seven" label="7"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="7"/>
@@ -171,7 +173,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yel-56-2uI">
-                                                        <rect key="frame" x="609" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="243" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="eight" label="8"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="8"/>
@@ -180,7 +182,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gzi-J1-Jua">
-                                                        <rect key="frame" x="812" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="324" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="nine" label="9"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="9"/>
@@ -191,10 +193,10 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Jen-vM-Vxd">
-                                                <rect key="frame" x="0.0" y="635.5" width="1014" height="211"/>
+                                                <rect key="frame" x="0.0" y="320.66666666666663" width="404" height="105.66666666666669"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M9n-SB-NZa">
-                                                        <rect key="frame" x="0.0" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="pi" label="π"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="π"/>
@@ -203,7 +205,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YbS-7i-o4d">
-                                                        <rect key="frame" x="203" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="81" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="squaredRoot" label="√"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="√"/>
@@ -212,7 +214,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ajd-My-mxD">
-                                                        <rect key="frame" x="406" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="162" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="four" label="4"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="4"/>
@@ -221,7 +223,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G7A-jK-reh">
-                                                        <rect key="frame" x="609" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="243" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="five" label="5"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="5"/>
@@ -230,7 +232,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jEj-bo-GA8">
-                                                        <rect key="frame" x="812" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="324" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="six" label="6"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="6"/>
@@ -241,10 +243,10 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="O1f-i7-cD8">
-                                                <rect key="frame" x="0.0" y="847.5" width="1014" height="210.5"/>
+                                                <rect key="frame" x="0.0" y="427.33333333333337" width="404" height="106"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SCu-dg-fxP">
-                                                        <rect key="frame" x="0.0" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="cosinus" label="cos"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="cos"/>
@@ -253,7 +255,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fg6-xU-yIg">
-                                                        <rect key="frame" x="203" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="81" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="power" label="^"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="^"/>
@@ -262,7 +264,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wGI-Qz-Drk">
-                                                        <rect key="frame" x="406" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="162" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="one" label="1"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="1"/>
@@ -271,7 +273,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b8o-mM-1n3">
-                                                        <rect key="frame" x="609" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="243" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="two" label="2"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="2"/>
@@ -280,7 +282,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hqh-ZS-Wgv">
-                                                        <rect key="frame" x="812" y="0.0" width="202" height="210.5"/>
+                                                        <rect key="frame" x="324" y="0.0" width="80" height="106"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="three" label="3"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="3"/>
@@ -291,10 +293,10 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="itQ-Pv-Gof">
-                                                <rect key="frame" x="0.0" y="1059" width="1014" height="211"/>
+                                                <rect key="frame" x="0.0" y="534.33333333333348" width="404" height="105.66666666666663"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XZx-rN-tHF">
-                                                        <rect key="frame" x="0.0" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="105.66666666666663"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="sinus" label="sin"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="sin"/>
@@ -303,7 +305,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DCg-a1-4Lu">
-                                                        <rect key="frame" x="203" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="81" y="0.0" width="80" height="105.66666666666663"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="changeSign" label="±"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="±"/>
@@ -312,7 +314,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PwA-pP-TXN">
-                                                        <rect key="frame" x="406" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="162" y="0.0" width="80" height="105.66666666666663"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="decimalPoint" label="."/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="."/>
@@ -321,7 +323,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KF3-uj-8aL">
-                                                        <rect key="frame" x="609" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="243" y="0.0" width="80" height="105.66666666666663"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="zero" label="0"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="0"/>
@@ -330,7 +332,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftU-6W-PX7">
-                                                        <rect key="frame" x="812" y="0.0" width="202" height="211"/>
+                                                        <rect key="frame" x="324" y="0.0" width="80" height="105.66666666666663"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="equals" label="="/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                                         <state key="normal" title="="/>
@@ -359,6 +361,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="XDE-0G-Ncs">
+                    <connections>
+                        <action selector="varaiblesListLongPress:" destination="BYZ-38-t0r" id="Mhf-hX-Ejp"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-557" y="8"/>
         </scene>

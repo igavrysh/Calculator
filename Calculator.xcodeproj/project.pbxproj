@@ -114,9 +114,9 @@
 				E0592BF21F401F4C0097A3D5 /* Extensions.swift */,
 				85CFACED1E830B7200D50C4C /* CalculatorBrain.swift */,
 				85CFACDC1E82F4EC00D50C4C /* ViewController.swift */,
+				E008CFB21F1BB035009E811C /* DataStructures.swift */,
 				85CFACDE1E82F4EC00D50C4C /* Main.storyboard */,
 				85CFACEC1E82F58D00D50C4C /* Supporting Files */,
-				E008CFB21F1BB035009E811C /* DataStructures.swift */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";
