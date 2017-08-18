@@ -71,23 +71,23 @@ struct CalculatorBrain {
     private var operations: Queue<String> = Queue()
     
     mutating func setOperand(_ operand: Double) {
-        self.operands.enqueue(Operand.value(operand))
+        addOperand(Operand.value(operand))
     }
     
     mutating func setOperand(variable named: String) {
-        self.operands.enqueue(Operand.variable(named))
+        addOperand(Operand.variable(named))
     }
     
     var result: Double? {
-        return self.evaluate().result
+        return evaluate().result
     }
     
     var description: String? {
-        return  self.evaluate().description + "\(self.resultIsPending ? "..." : "=")"
+        return evaluate().description + "\(self.resultIsPending ? "..." : "=")"
     }
     
     var resultIsPending: Bool {
-        return self.evaluate().isPending
+        return evaluate().isPending
     }
     
     // MARK: -
@@ -186,5 +186,18 @@ struct CalculatorBrain {
     mutating func clearBrain() {
         self.operands = Queue()
         self.operations = Queue()
+    }
+    
+    // MARK: -
+    // MARK: Private
+    
+    private mutating func addOperand(_ operand: Operand) {
+        self.operations.last.do {
+            if $0 == "=" {
+                clearBrain()
+            }
+        }
+        
+        self.operands.enqueue(operand)
     }
 }

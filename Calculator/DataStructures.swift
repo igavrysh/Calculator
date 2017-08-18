@@ -38,4 +38,16 @@ struct Queue<T> {
     var count: Int {
         return self.values.count
     }
+    
+    var last: T? {
+        return self.values.last
+    }
+    
+    var first: T? {
+        return self.values.first
+    }
+    
+    subscript(index: Int) -> T {
+        return self.values[index]
+    }
 }

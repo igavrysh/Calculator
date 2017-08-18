@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     
     var userIsInTheMiddleOfTyping = false
     
+    var variables: [String: Double]?
+    
     let decimalSymbol = "."
     
     @IBAction func touchDigit(_ sender: UIButton) {
@@ -52,8 +54,12 @@ class ViewController: UIViewController {
     }
     
     var displayValue: Double {
-        get {
-            return Double(self.touchedSequence!)!
+        get {            
+            guard let value = Double(self.touchedSequence!) else {
+                return self.variables?[self.touchedSequence!] ?? 0
+            }
+            
+            return value
         }
         
         set {
@@ -69,6 +75,17 @@ class ViewController: UIViewController {
     
     private var brain = CalculatorBrain()
     
+    private func process() {
+        self.brain.description.do { log.text = $0 }
+        self.brain.result.do { self.displayValue = $0 }
+        
+        /*
+        let expression = self.brain.evaluate(using: self.variables)
+        expression.result.do {  self.displayValue = $0  }
+        log.text = expression.description
+         */
+    }
+    
     @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping {
             brain.setOperand(displayValue)
@@ -77,15 +94,14 @@ class ViewController: UIViewController {
         
         sender.currentTitle.do { self.brain.performOperation($0)}
         
-        self.brain.result.do { self.displayValue = $0 }
-        
-        self.brain.description.do { log.text = $0 }
+        process()
     }
     
     @IBAction func performClean(_ sender: UIButton) {
         self.brain.clearBrain()
         self.userIsInTheMiddleOfTyping = false
         self.displayValue = 0
+        self.variables = nil
         log.text = " "
     }
     
@@ -107,5 +123,19 @@ class ViewController: UIViewController {
             
             self.touchedSequence = text
         }
+    }
+    
+    @IBAction func touchVariable(_ sender: UIButton) {
+        
+        self.brain.setOperand(variable: "M")
+        
+        self.display.text = "M"
+    }
+    
+    @IBAction func inputVariable(_ sender: UIButton) {
+        
+        self.variables = ["M": self.displayValue]
+        
+        process()
     }
 }

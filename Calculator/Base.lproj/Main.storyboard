@@ -49,22 +49,23 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYT-wg-cdG">
                                                         <rect key="frame" x="0.0" y="0.0" width="63" height="78"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="Ho"/>
+                                                        <state key="normal" title="⏈"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1U-cL-WT8">
                                                         <rect key="frame" x="64" y="0.0" width="62.5" height="78"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="Ho"/>
+                                                        <state key="normal" title="→M"/>
                                                         <connections>
+                                                            <action selector="inputVariable:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N0M-zT-cce"/>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NUa-Ly-wDU"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AGJ-yo-lLf">
                                                         <rect key="frame" x="127.5" y="0.0" width="63" height="78"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="Ho"/>
+                                                        <state key="normal" title="M"/>
                                                         <connections>
-                                                            <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uAh-Bs-x2e"/>
+                                                            <action selector="touchVariable:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Mqv-1m-g1h"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AMs-X6-lwH">
