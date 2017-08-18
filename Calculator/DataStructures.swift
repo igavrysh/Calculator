@@ -31,6 +31,7 @@ struct Queue<T> {
         return self.isEmpty ? nil : self.values.removeFirst()
     }
     
+    @discardableResult
     mutating func removeLast() -> T? {
         return self.isEmpty ? nil : self.values.removeLast()
     }

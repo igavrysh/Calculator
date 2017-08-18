@@ -201,7 +201,7 @@ struct CalculatorBrain {
     
     mutating func undo() {
         if self.resultIsPending {
-            _ = self.operations.removeLast()
+            self.operations.removeLast()
             
             return
         }
@@ -217,7 +217,7 @@ struct CalculatorBrain {
                     undo()
                 case .binaryOperation(_):
                     self.operations.enqueue(operationSymbol)
-                    _ = self.operands.removeLast()
+                    self.operands.removeLast()
                 default: break
                 }
             }
@@ -235,5 +235,13 @@ struct CalculatorBrain {
         }
         
         self.operands.enqueue(operand)
+    }
+    
+    private mutating func addOperation(_ symbol: String) {
+        if self.evaluate().isPending {
+            self.operations.removeLast()
+        }
+        
+        self.operations.enqueue(symbol)
     }
 }

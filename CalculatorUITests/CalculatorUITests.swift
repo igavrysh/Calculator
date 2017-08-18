@@ -301,8 +301,9 @@ class CalculatorUITests: XCTestCase {
         self.app.buttons["addVariableOperand"].tap()
         self.app.buttons["cosinus"].tap()
         self.app.buttons["pi"].tap()
+        self.app.buttons["setVariableValue"].tap()
         self.app.buttons["backspace"].tap()
         XCTAssert(self.app.staticTexts["display"].label == "-1")
-        XCTAssert(self.app.staticTexts["description"].label == "cos(M)")
+        XCTAssert(self.app.staticTexts["description"].label == "cos(M)=")
     }
 }
