@@ -135,7 +135,6 @@ class ViewController: UIViewController {
             return
         }
         
-        
         if var text = self.touchedSequence {
             text.remove(at: text.index(before: text.endIndex))
             if (text.characters.last == ".") {

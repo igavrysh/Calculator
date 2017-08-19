@@ -274,4 +274,30 @@ class CalculatorTests: XCTestCase {
         XCTAssert(finalEvalResult.description == "√(9+M)+14=")
         XCTAssert(finalEvalResult.result == 18)
     }
+    
+    // 9 + - × 2 = ⇒ display now shows 18, description is now 9×2=
+    func testCase1ChangingInputOperations() {
+        self.brain.setOperand(9)
+        self.brain.performOperation("+")
+        self.brain.performOperation("-")
+        self.brain.performOperation("×")
+        self.brain.setOperand(2)
+        let evalResult = self.brain.evaluate()
+        XCTAssert(evalResult.description == "9×2=")
+        XCTAssert(evalResult.result == 18)
+    }
+    
+    // 9 + 2 = + - × 3 ⇒ display now shows 33, description is now 9+2×3=
+    func testCase2ChangingInputOperations() {
+        self.brain.setOperand(9)
+        self.brain.performOperation("+")
+        self.brain.setOperand(2)
+        self.brain.performOperation("+")
+        self.brain.performOperation("-")
+        self.brain.performOperation("×")
+        self.brain.setOperand(3)
+        let evalResult = self.brain.evaluate()
+        XCTAssert(evalResult.description == "9+2×3=")
+        XCTAssert(evalResult.result == 33)
+    }
 }

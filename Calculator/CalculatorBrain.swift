@@ -94,7 +94,7 @@ struct CalculatorBrain {
     // MARK: Public
 
     mutating func performOperation(_ symbol: String) {
-        self.operations.enqueue(symbol)
+        addOperation(symbol)
     }
     
     func evaluate(using variables: Dictionary<String, Double>? = nil) -> (result: Double?, isPending: Bool, description: String) {
