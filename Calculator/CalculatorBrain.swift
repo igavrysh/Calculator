@@ -56,7 +56,7 @@ struct CalculatorBrain {
         "sin" : Operation.unartyOperation(sin),
         "±" : Operation.unartyOperation({ -$0 }),
         "×" : Operation.binaryOperation({ $0 * $1 }),
-        "−" : Operation.binaryOperation({ $0 - $1 }),
+        "-" : Operation.binaryOperation({ $0 - $1 }),
         "+" : Operation.binaryOperation({ $0 + $1 }),
         "÷" : Operation.binaryOperation({ $0 / $1 }),
         "^" : Operation.binaryOperation(pow),
@@ -238,8 +238,11 @@ struct CalculatorBrain {
     }
     
     private mutating func addOperation(_ symbol: String) {
-        if self.evaluate().isPending {
-            self.operations.removeLast()
+        let isPending = self.evaluate().isPending
+        if isPending, let operation = self.availableOperations[symbol] {
+            if case .binaryOperation(_) = operation {
+                self.operations.removeLast()
+            }
         }
         
         self.operations.enqueue(symbol)

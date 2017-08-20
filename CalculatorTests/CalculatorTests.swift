@@ -282,6 +282,7 @@ class CalculatorTests: XCTestCase {
         self.brain.performOperation("-")
         self.brain.performOperation("×")
         self.brain.setOperand(2)
+        self.brain.performOperation("=")
         let evalResult = self.brain.evaluate()
         XCTAssert(evalResult.description == "9×2=")
         XCTAssert(evalResult.result == 18)
@@ -296,8 +297,27 @@ class CalculatorTests: XCTestCase {
         self.brain.performOperation("-")
         self.brain.performOperation("×")
         self.brain.setOperand(3)
+        self.brain.performOperation("=")
         let evalResult = self.brain.evaluate()
         XCTAssert(evalResult.description == "9+2×3=")
         XCTAssert(evalResult.result == 33)
+    }
+    
+    // 9 + 2 = + - × 4 = ÷ 2 ⇒ display now shows 33, description is now 9+2×4÷2=22
+    func testCase3ChangingInputOperations() {
+        self.brain.setOperand(9)
+        self.brain.performOperation("+")
+        self.brain.setOperand(2)
+        self.brain.performOperation("+")
+        self.brain.performOperation("-")
+        self.brain.performOperation("×")
+        self.brain.setOperand(4)
+        self.brain.performOperation("=")
+        self.brain.performOperation("÷")
+        self.brain.setOperand(2)
+        self.brain.performOperation("=")
+        let evalResult = self.brain.evaluate()
+        XCTAssert(evalResult.description == "9+2×4÷2=")
+        XCTAssert(evalResult.result == 22)
     }
 }
