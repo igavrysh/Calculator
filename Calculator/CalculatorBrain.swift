@@ -14,16 +14,16 @@ struct CalculatorBrain {
     // MARK: Subtypes
     
     private enum Operation {
-        case constant(Double)
-        case unartyOperation((Double) -> Double)
-        case binaryOperation((Double, Double) -> Double)
-        case genOperation(() -> Double)
+        case constant (Double)
+        case unartyOperation ((Double) -> Double)
+        case binaryOperation ((Double, Double) -> Double)
+        case genOperation (() -> Double)
         case equals
     }
     
     private enum Operand {
-        case value(Double)
-        case variable(String)
+        case value (Double)
+        case variable (String)
         
         func double(with variables: [String: Double]?) -> Double {
             switch self {
@@ -175,6 +175,7 @@ struct CalculatorBrain {
             }
         } while !ops.isEmpty
         
+        // Required for correct undo() functionality
         if !oprnds.isEmpty {
             fetchOperand()
             
@@ -182,7 +183,6 @@ struct CalculatorBrain {
         }
         
         return (result: accumulator.result
-                    //?? oprnds.dequeue()?.double(with: variables)
                     ?? pendingBinaryOperation?.firstPart.result,
                 isPending: pendingBinaryOperation != nil,
                 description: (pendingBinaryOperation?.firstPart.description ?? "")
@@ -237,8 +237,11 @@ struct CalculatorBrain {
     
     private mutating func addOperation(_ symbol: String) {
         let isPending = self.evaluate().isPending
-        if isPending, let operation = self.availableOperations[symbol] {
-            if case .binaryOperation(_) = operation {
+        if isPending,
+            let operation = self.availableOperations[symbol],
+            let lastOperatinon = self.availableOperations[self.operations.last ?? ""]
+        {
+            if case .binaryOperation(_) = operation, case .binaryOperation(_) = lastOperatinon {
                 self.operations.removeLast()
             }
         }

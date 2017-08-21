@@ -271,7 +271,7 @@ class CalculatorTests: XCTestCase {
         XCTAssert(evalResult.description == "9+2×4÷2=")
         XCTAssert(evalResult.result == 22)
     }
-    
+ 
     func testCasePlus() {
         self.brain.setOperand(1)
         self.brain.performOperation("+")
@@ -369,4 +369,15 @@ class CalculatorTests: XCTestCase {
         XCTAssert(abs((self.brain.result ?? 0) - cos(5 * Double.pi)) < 0.01)
     }
     
+    func testCaseBinaryUnaryBinaryOperations() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("×")
+        self.brain.setOperand(9)
+        self.brain.performOperation("√")
+        self.brain.performOperation("+")
+        self.brain.setOperand(1)
+        self.brain.performOperation("=")
+        XCTAssert(self.brain.description == "5×√(9)+1=")
+        XCTAssert(self.brain.result == 16)
+    }
 }
