@@ -2,7 +2,10 @@
 
 brew install ImageMagick
 
-ICON_PATH="../icons/icon.png"
+convert -size 4000x4000  radial-gradient:white-orange -gravity center -crop 1500x1500+0+0  rgradient.png
+convert rgradient.png icon.png   -gravity center -composite result.png
+
+ICON_PATH="icon-color.png"
 
 convert $ICON_PATH -resize 167x167 "167x167.png"
 convert $ICON_PATH -resize 152x152 "152x152.png"
