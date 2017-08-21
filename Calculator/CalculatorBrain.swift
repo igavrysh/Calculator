@@ -9,77 +9,245 @@
 import Foundation
 
 struct CalculatorBrain {
-
-    private var accumulator: Double?
+    
+    // MARK: -
+    // MARK: Subtypes
     
     private enum Operation {
-        case constant(Double)
-        case unartyOperation((Double) -> Double)
-        case binaryOperation((Double, Double) -> Double)
+        case constant (Double)
+        case unartyOperation ((Double) -> Double)
+        case binaryOperation ((Double, Double) -> Double)
+        case genOperation (() -> Double)
         case equals
     }
     
-    private var operations: Dictionary<String, Operation> = [
-        "π" : Operation.constant(Double.pi),
-        "e" : Operation.constant(M_E),
-        "√" : Operation.unartyOperation(sqrt),
-        "cos" : Operation.unartyOperation(cos),
-        "±" : Operation.unartyOperation({ -$0 }),
-        "×" : Operation.binaryOperation({ $0 * $1 }),
-        "−" : Operation.binaryOperation({ $0 - $1 }),
-        "+" : Operation.binaryOperation({ $0 + $1 }),
-        "÷" : Operation.binaryOperation({ $0 / $1 }),
-        "=" : Operation.equals
-    ]
-
-    mutating func performOperation(_ symbol: String) {
-        if let operation = operations[symbol] {
-            switch operation {
-            case .constant(let value):
-                accumulator = value
-                break
-            case .unartyOperation(let function):
-                if accumulator != nil {
-                    accumulator = function(accumulator!)
-                }
-            case .binaryOperation(let function):
-                if accumulator != nil {
-                    pendingBinaryOperation = PendingBinartyOperaion(function: function, firstOperand: accumulator!)
-                    accumulator = nil
-                }
-                
-                break;
-            case .equals:
-                performPendingBinartyOperation();
+    private enum Operand {
+        case value (Double)
+        case variable (String)
+        
+        func double(with variables: [String: Double]?) -> Double {
+            switch self {
+            case .value(let value):
+                return value
+            case .variable(let name):
+                return variables?[name] ?? 0
+            }
+        }
+        
+        var description: String {
+            switch self {
+            case .value(let val):
+                return "\(val.stringWithoutInsignificantFractionDigits)"
+            case .variable(let variable):
+                return variable
             }
         }
     }
     
-    mutating private func performPendingBinartyOperation() {
-        if pendingBinaryOperation != nil && accumulator != nil {
-            accumulator = pendingBinaryOperation!.perform(with: accumulator!)
-            pendingBinaryOperation = nil
-        }
-    }
+    // MARK: -
+    // MARK: Static
     
-    private var pendingBinaryOperation: PendingBinartyOperaion?
+    private static let defaultOperations: [String: Operation] = [
+        "π" : Operation.constant(Double.pi),
+        "e" : Operation.constant(M_E),
+        "√" : Operation.unartyOperation(sqrt),
+        "1/" : Operation.unartyOperation({ 1 / $0}),
+        "cos" : Operation.unartyOperation(cos),
+        "sin" : Operation.unartyOperation(sin),
+        "±" : Operation.unartyOperation({ -$0 }),
+        "×" : Operation.binaryOperation({ $0 * $1 }),
+        "-" : Operation.binaryOperation({ $0 - $1 }),
+        "+" : Operation.binaryOperation({ $0 + $1 }),
+        "÷" : Operation.binaryOperation({ $0 / $1 }),
+        "^" : Operation.binaryOperation(pow),
+        "rand" : Operation.genOperation({ Double(arc4random())/Double(UInt32.max) }),
+        "=" : Operation.equals
+    ]
     
-    private struct PendingBinartyOperaion {
-        let function: (Double, Double) -> Double
-        let firstOperand: Double
-        
-        func perform(with secondOperand: Double) -> Double {
-            return function(firstOperand, secondOperand)
-        }
-    }
+    // MARK: -
+    // MARK: Properties
+    private var availableOperations = CalculatorBrain.defaultOperations
+    private var operands: Queue<Operand> = Queue()
+    private var operations: Queue<String> = Queue()
     
     mutating func setOperand(_ operand: Double) {
-        accumulator = operand
+        addOperand(Operand.value(operand))
+    }
+    
+    mutating func setOperand(variable named: String) {
+        addOperand(Operand.variable(named))
     }
     
     var result: Double? {
-        get {
-            return accumulator
+        return evaluate().result
+    }
+    
+    var description: String? {
+        return evaluate().description
+    }
+    
+    var resultIsPending: Bool {
+        return evaluate().isPending
+    }
+    
+    // MARK: -
+    // MARK: Public
+
+    mutating func performOperation(_ symbol: String) {
+        addOperation(symbol)
+    }
+    
+    func evaluate(using variables: Dictionary<String, Double>? = nil) -> (result: Double?, isPending: Bool, description: String) {
+        struct PendingBinartyOperaion {
+            let function: (Double, Double) -> Double
+            let firstPart: (result: Double?, description: String)
+            
+            func perform(with secondPart: (result: Double?, description: String),
+                         variables: [String: Double]?) -> (result: Double?, description: String)
+            {
+                return lift((firstPart.result, secondPart.result)).map {
+                        (result: function($0, $1),
+                         description: "\(firstPart.description)\(secondPart.description)")
+                    }
+                    ?? (result:nil, description: "")
+            }
+        }
+        
+        var ops = self.operations
+        var oprnds = self.operands
+        
+        var accumulator: (result: Double?, description: String) = (result: nil, description: "")
+        var pendingBinaryOperation: PendingBinartyOperaion?
+        
+        func performPendingBinartyOperation(_ operation: inout PendingBinartyOperaion?) {
+            operation.do { pbo in
+                accumulator = pbo.perform(with: accumulator, variables: variables)
+                
+                operation = nil
+            }
+        }
+        
+        func fetchOperand() {
+            if accumulator.result == nil {
+                oprnds.dequeue().do {
+                    accumulator = (result:$0.double(with: variables),
+                                   description:$0.description)
+                }
+            }
+        }
+        
+        repeat {
+            ops.dequeue().map { (operationSymbol: String) in
+                self.availableOperations[operationSymbol].do {
+                    switch $0 {
+                    case .constant(let value):
+                        accumulator = (result: value, description: "\(operationSymbol)")
+                        
+                    case .genOperation(let function):
+                        accumulator = (result: function(), description: "\(operationSymbol)")
+                        
+                    case .unartyOperation(let function):
+                        fetchOperand()
+                        
+                        lift(accumulator).do {
+                            accumulator = (result: function($0), description: "\(operationSymbol)(\($1))")
+                        }
+                        
+                    case .binaryOperation(let function):
+                        fetchOperand()
+                        
+                        performPendingBinartyOperation(&pendingBinaryOperation)
+                        
+                        pendingBinaryOperation = PendingBinartyOperaion(
+                            function: function,
+                            firstPart: (result: accumulator.result,
+                                        description: accumulator.description + operationSymbol)
+                        )
+                        
+                        accumulator = (result: nil, description: "")
+                        
+                    case .equals:
+                        fetchOperand()
+                        
+                        performPendingBinartyOperation(&pendingBinaryOperation)
+                    }
+                }
+            }
+        } while !ops.isEmpty
+        
+        // Required for correct undo() functionality
+        if !oprnds.isEmpty {
+            fetchOperand()
+            
+            performPendingBinartyOperation(&pendingBinaryOperation)
+        }
+        
+        return (result: accumulator.result
+                    ?? pendingBinaryOperation?.firstPart.result,
+                isPending: pendingBinaryOperation != nil,
+                description: (pendingBinaryOperation?.firstPart.description ?? "")
+                    + accumulator.description
+                    + "\(pendingBinaryOperation != nil ? "..." : "=")"
+                    
+        )
+    }
+    
+    mutating func clearBrain() {
+        self.operands = Queue()
+        self.operations = Queue()
+    }
+    
+    mutating func undo() {
+        if self.resultIsPending {
+            self.operations.removeLast()
+            
+            return
+        }
+        
+        if self.operations.isEmpty && !self.operands.isEmpty {
+            self.operands = Queue()
+        }
+
+        self.operations.removeLast().do { operationSymbol in
+            self.availableOperations[operationSymbol].do {
+                switch $0 {
+                case .equals:
+                    undo()
+                case .binaryOperation(_):
+                    self.operations.enqueue(operationSymbol)
+                    self.operands.removeLast()
+                default: break
+                }
+            }
+        }
+    }
+    
+    // MARK: -
+    // MARK: Private
+    
+    private mutating func addOperand(_ operand: Operand) {
+        self.operations.last.do { _ in
+            if !evaluate().isPending {
+                clearBrain()
+            }
+        }
+        
+        self.operands.enqueue(operand)
+    }
+    
+    private mutating func addOperation(_ symbol: String) {
+        let isPending = self.evaluate().isPending
+        if isPending,
+            let operation = self.availableOperations[symbol],
+            let lastOperatinon = self.availableOperations[self.operations.last ?? ""]
+        {
+            if case .binaryOperation(_) = operation, case .binaryOperation(_) = lastOperatinon {
+                self.operations.removeLast()
+            }
+        }
+        
+        if self.availableOperations[symbol] != nil {
+            self.operations.enqueue(symbol)
         }
     }
 }

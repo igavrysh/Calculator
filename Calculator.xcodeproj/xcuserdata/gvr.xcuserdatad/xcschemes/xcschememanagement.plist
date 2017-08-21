@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Calculator.xcscheme</key>
+		<key>Calculator.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -13,6 +13,16 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>85CFACD61E82F4EC00D50C4C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E0592BE11F4017EA0097A3D5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E0592BFB1F4194F00097A3D5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
