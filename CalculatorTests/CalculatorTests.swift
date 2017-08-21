@@ -20,33 +20,6 @@ class CalculatorTests: XCTestCase {
         super.tearDown()
     }
     
-    // touching 25 ± ± should display -25 and next 25
-    func testCaseChangeSign() {
-        self.brain.setOperand(25)
-        self.brain.performOperation("±")
-        XCTAssert(self.brain.result == -25)
-        XCTAssert(self.brain.description == "±(25)=")
-        self.brain.performOperation("±")
-        XCTAssert(self.brain.result == 25)
-        XCTAssert(self.brain.description == "±(±(25))=")
-    }
-    
-    // touching 25 √ should display 5
-    func testCaseSquaredRoot() {
-        self.brain.setOperand(25)
-        self.brain.performOperation("√")
-        XCTAssert(self.brain.description == "√(25)=")
-        XCTAssert(self.brain.result == 5)
-    }
-    
-    // touching 5 and 1/ should display 0.2 as a result and 1/(5)
-    func testCaseOneOver() {
-        self.brain.setOperand(5)
-        self.brain.performOperation("1/")
-        XCTAssert(self.brain.description == "1/(5)=")
-        XCTAssert(self.brain.result == 0.2)
-    }
-    
     // a. touching 7 + would show “7 + ...” (with 7 still in the display)
     func testCaseA() {
         self.brain.setOperand(7)
@@ -194,28 +167,6 @@ class CalculatorTests: XCTestCase {
         XCTAssert(abs((self.brain.result ?? 0) - (5.0 * M_E)) < 0.01)
     }
     
-    // m. 5 * π cos = would show “cos(5×π)=“ (5 * .e)
-    func testCaseCos() {
-        self.brain.setOperand(5)
-        self.brain.performOperation("×")
-        self.brain.performOperation("π")
-        self.brain.performOperation("=")
-        self.brain.performOperation("cos")
-        XCTAssert(self.brain.description == "cos(5×π)=")
-        XCTAssert(abs((self.brain.result ?? 0) - cos(5 * Double.pi)) < 0.01)
-    }
-    
-    // n. 5 * π sin = would show “sin(5×π)=“ (5 * .e)
-    func testCaseSin() {
-        self.brain.setOperand(5)
-        self.brain.performOperation("×")
-        self.brain.performOperation("π")
-        self.brain.performOperation("=")
-        self.brain.performOperation("sin")
-        XCTAssert(self.brain.description == "sin(5×π)=")
-        XCTAssert(abs((self.brain.result ?? 0) - sin(5 * Double.pi)) < 0.01)
-    }
-    
     // o. 5 ^ 0 = would show “5^0=“ =0
     func testCasePower1() {
         self.brain.setOperand(5)
@@ -320,4 +271,102 @@ class CalculatorTests: XCTestCase {
         XCTAssert(evalResult.description == "9+2×4÷2=")
         XCTAssert(evalResult.result == 22)
     }
+    
+    func testCasePlus() {
+        self.brain.setOperand(1)
+        self.brain.performOperation("+")
+        self.brain.setOperand(2)
+        self.brain.performOperation("=")
+        let evalResult = self.brain.evaluate()
+        XCTAssert(evalResult.description == "1+2=")
+        XCTAssert(evalResult.result == 3)
+    }
+    
+    func testCaseMinus() {
+        self.brain.setOperand(1)
+        self.brain.performOperation("-")
+        self.brain.setOperand(2)
+        self.brain.performOperation("=")
+        let evalResult = self.brain.evaluate()
+        XCTAssert(evalResult.description == "1-2=")
+        XCTAssert(evalResult.result == -1)
+    }
+    
+    func testCaseMultiply() {
+        self.brain.setOperand(2)
+        self.brain.performOperation("×")
+        self.brain.setOperand(3)
+        self.brain.performOperation("=")
+        let evalResult = self.brain.evaluate()
+        XCTAssert(evalResult.description == "2×3=")
+        XCTAssert(evalResult.result == 6)
+    }
+    
+    func testCaseDivide() {
+        self.brain.setOperand(1.8)
+        self.brain.performOperation("÷")
+        self.brain.setOperand(3)
+        self.brain.performOperation("=")
+        let evalResult = self.brain.evaluate()
+        XCTAssert(evalResult.description == "1.8÷3=")
+        XCTAssert(evalResult.result == 0.6)
+    }
+    
+    // touching 25 ± ± should display -25 and next 25
+    func testCaseChangeSign() {
+        self.brain.setOperand(25)
+        self.brain.performOperation("±")
+        XCTAssert(self.brain.result == -25)
+        XCTAssert(self.brain.description == "±(25)=")
+        self.brain.performOperation("±")
+        XCTAssert(self.brain.result == 25)
+        XCTAssert(self.brain.description == "±(±(25))=")
+    }
+    
+    // touching 25 √ should display 5
+    func testCaseSquaredRoot() {
+        self.brain.setOperand(25)
+        self.brain.performOperation("√")
+        XCTAssert(self.brain.description == "√(25)=")
+        XCTAssert(self.brain.result == 5)
+    }
+    
+    // touching 5 and 1/ should display 0.2 as a result and 1/(5)
+    func testCaseOneOver() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("1/")
+        XCTAssert(self.brain.description == "1/(5)=")
+        XCTAssert(self.brain.result == 0.2)
+    }
+    
+    func testCasePower() {
+        self.brain.setOperand(2)
+        self.brain.performOperation("^")
+        self.brain.setOperand(3)
+        XCTAssert(self.brain.description == "2^3=")
+        XCTAssert(self.brain.result == 8)
+    }
+    
+    // 5 * π sin = would show “sin(5×π)=“ (5 * .e)
+    func testCaseSin() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("×")
+        self.brain.performOperation("π")
+        self.brain.performOperation("=")
+        self.brain.performOperation("sin")
+        XCTAssert(self.brain.description == "sin(5×π)=")
+        XCTAssert(abs((self.brain.result ?? 0) - sin(5 * Double.pi)) < 0.01)
+    }
+    
+    // 5 * π cos = would show “cos(5×π)=“ (5 * .e)
+    func testCaseCos() {
+        self.brain.setOperand(5)
+        self.brain.performOperation("×")
+        self.brain.performOperation("π")
+        self.brain.performOperation("=")
+        self.brain.performOperation("cos")
+        XCTAssert(self.brain.description == "cos(5×π)=")
+        XCTAssert(abs((self.brain.result ?? 0) - cos(5 * Double.pi)) < 0.01)
+    }
+    
 }

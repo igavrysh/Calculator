@@ -117,7 +117,7 @@
                                                         <rect key="frame" x="162" y="0.0" width="80" height="105.66666666666669"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="minus" label="-"/>
                                                         <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
-                                                        <state key="normal" title="−"/>
+                                                        <state key="normal" title="-"/>
                                                         <connections>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="G7c-Hd-hTg"/>
                                                         </connections>

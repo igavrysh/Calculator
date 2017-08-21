@@ -106,12 +106,10 @@ struct CalculatorBrain {
                          variables: [String: Double]?) -> (result: Double?, description: String)
             {
                 return lift((firstPart.result, secondPart.result)).map {
-                    (result: function($0, $1),
-                     description: "\(firstPart.description)\(secondPart.description)")
+                        (result: function($0, $1),
+                         description: "\(firstPart.description)\(secondPart.description)")
                     }
-                    ??
-                    (result:nil,
-                     description: "")
+                    ?? (result:nil, description: "")
             }
         }
         
@@ -245,6 +243,8 @@ struct CalculatorBrain {
             }
         }
         
-        self.operations.enqueue(symbol)
+        if self.availableOperations[symbol] != nil {
+            self.operations.enqueue(symbol)
+        }
     }
 }
