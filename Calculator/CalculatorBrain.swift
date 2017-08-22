@@ -15,10 +15,15 @@ struct CalculatorBrain {
     
     private enum Operation {
         case constant (Double)
-        case unartyOperation ((Double) -> Double)
+        case unaryOperation ((Double) -> Double)
         case binaryOperation ((Double, Double) -> Double)
         case genOperation (() -> Double)
         case equals
+    }
+    
+    private enum ArgCheck {
+        case unaryOperationCheck((Double) -> String?)
+        case binaryOperationCheck((Double, Double) -> String?)
     }
     
     private enum Operand {
@@ -50,11 +55,11 @@ struct CalculatorBrain {
     private static let defaultOperations: [String: Operation] = [
         "π" : Operation.constant(Double.pi),
         "e" : Operation.constant(M_E),
-        "√" : Operation.unartyOperation(sqrt),
-        "1/" : Operation.unartyOperation({ 1 / $0}),
-        "cos" : Operation.unartyOperation(cos),
-        "sin" : Operation.unartyOperation(sin),
-        "±" : Operation.unartyOperation({ -$0 }),
+        "√" : Operation.unaryOperation(sqrt),
+        "1/" : Operation.unaryOperation({ 1 / $0}),
+        "cos" : Operation.unaryOperation(cos),
+        "sin" : Operation.unaryOperation(sin),
+        "±" : Operation.unaryOperation({ -$0 }),
         "×" : Operation.binaryOperation({ $0 * $1 }),
         "-" : Operation.binaryOperation({ $0 - $1 }),
         "+" : Operation.binaryOperation({ $0 + $1 }),
@@ -64,8 +69,15 @@ struct CalculatorBrain {
         "=" : Operation.equals
     ]
     
+    private static let argCheckFor: [String: ArgCheck] = [
+        "√" : ArgCheck.unaryOperationCheck({ $0 < 0 ? "Complex result" : nil }),
+        "1/" : ArgCheck.unaryOperationCheck({ $0 == 0 ? "Not finite result, one over zero" : nil }),
+        "÷" : ArgCheck.binaryOperationCheck({ $1 == 0 ? "Not finite result, division by zero" : nil })
+    ]
+    
     // MARK: -
     // MARK: Properties
+    
     private var availableOperations = CalculatorBrain.defaultOperations
     private var operands: Queue<Operand> = Queue()
     private var operations: Queue<String> = Queue()
@@ -100,27 +112,48 @@ struct CalculatorBrain {
         addOperation(symbol)
     }
     
-    func evaluate(using variables: Dictionary<String, Double>? = nil) -> (result: Double?, isPending: Bool, description: String) {
-        struct PendingBinartyOperaion {
-            let function: (Double, Double) -> Double
-            let firstPart: (result: Double?, description: String)
-            
-            func perform(with secondPart: (result: Double?, description: String),
-                         variables: [String: Double]?) -> (result: Double?, description: String)
-            {
-                return lift((firstPart.result, secondPart.result)).map {
-                        (result: function($0, $1),
-                         description: "\(firstPart.description)\(secondPart.description)")
-                    }
-                    ?? (result:nil, description: "")
-            }
-        }
+    func evaluate(using variables: Dictionary<String, Double>? = nil)
+        -> (result: Double?, isPending: Bool, description: String)
+    {
+        let evalResult = evaluateWithLogging(using: variables)
         
+        return (result: evalResult.result,
+                isPending: evalResult.isPending,
+                description: evalResult.description)
+    }
+    
+    func evaluateWithLogging(using variables: Dictionary<String, Double>? = nil)
+        -> (result: Double?, isPending: Bool, description: String, error: String?)
+    {
         var ops = self.operations
         var oprnds = self.operands
         
-        var accumulator: (result: Double?, description: String) = (result: nil, description: "")
+        var accumulator: (result: Double?, description: String, error: String?) = (result: nil, description: "", error:nil)
         var pendingBinaryOperation: PendingBinartyOperaion?
+        
+        struct PendingBinartyOperaion {
+            let function: (Double, Double) -> Double
+            let functionDesc: String
+            let firstPart: (result: Double?, description: String, error: String?)
+            
+            func perform(with secondPart: (result: Double?, description: String, error: String?),
+                         variables: [String: Double]?) -> (result: Double?, description: String, error: String?)
+            {
+                return lift((firstPart.result, secondPart.result)).map { arg1, arg2 in
+                    (result: function(arg1, arg2),
+                     description: "\(firstPart.description)\(secondPart.description)",
+                        error: firstPart.error ?? CalculatorBrain.argCheckFor[functionDesc]
+                            .map { (argCheck: ArgCheck) in
+                                if case ArgCheck.binaryOperationCheck(let function) = argCheck {
+                                    return function(arg1, arg2)!
+                                }
+                                
+                                return ""
+                        })
+                    }
+                    ?? (result:nil, description: "", error: nil)
+            }
+        }
         
         func performPendingBinartyOperation(_ operation: inout PendingBinartyOperaion?) {
             operation.do { pbo in
@@ -134,26 +167,42 @@ struct CalculatorBrain {
             if accumulator.result == nil {
                 oprnds.dequeue().do {
                     accumulator = (result:$0.double(with: variables),
-                                   description:$0.description)
+                                   description:$0.description,
+                                   error: nil)
                 }
             }
         }
+        
+        //var error: String? = nil
         
         repeat {
             ops.dequeue().map { (operationSymbol: String) in
                 self.availableOperations[operationSymbol].do {
                     switch $0 {
                     case .constant(let value):
-                        accumulator = (result: value, description: "\(operationSymbol)")
+                        accumulator
+                            = (result: value, description: "\(operationSymbol)", error: nil)
                         
                     case .genOperation(let function):
-                        accumulator = (result: function(), description: "\(operationSymbol)")
+                        accumulator = (result: function(), description: "\(operationSymbol)", error: nil)
                         
-                    case .unartyOperation(let function):
+                    case .unaryOperation(let function):
                         fetchOperand()
                         
-                        lift(accumulator).do {
-                            accumulator = (result: function($0), description: "\(operationSymbol)(\($1))")
+                        lift(accumulator).do { arg, dsc, error in
+                            accumulator
+                                = (
+                                    result: function(arg),
+                                    description: "\(operationSymbol)(\(dsc))",
+                                    error: error ?? CalculatorBrain.argCheckFor[operationSymbol]
+                                            .map { (argCheck: ArgCheck) in
+                                                if case ArgCheck.unaryOperationCheck(let function) = argCheck {
+                                                    return function(arg)!
+                                                }
+                                                
+                                                return ""
+                                    }
+                            )
                         }
                         
                     case .binaryOperation(let function):
@@ -163,11 +212,13 @@ struct CalculatorBrain {
                         
                         pendingBinaryOperation = PendingBinartyOperaion(
                             function: function,
+                            functionDesc: operationSymbol,
                             firstPart: (result: accumulator.result,
-                                        description: accumulator.description + operationSymbol)
+                                        description: accumulator.description + operationSymbol,
+                                        error: accumulator.error)
                         )
                         
-                        accumulator = (result: nil, description: "")
+                        accumulator = (result: nil, description: "", error: nil)
                         
                     case .equals:
                         fetchOperand()
@@ -185,13 +236,11 @@ struct CalculatorBrain {
             performPendingBinartyOperation(&pendingBinaryOperation)
         }
         
-        return (result: accumulator.result
-                    ?? pendingBinaryOperation?.firstPart.result,
-                isPending: pendingBinaryOperation != nil,
-                description: (pendingBinaryOperation?.firstPart.description ?? "")
-                    + accumulator.description
-                    + "\(pendingBinaryOperation != nil ? "..." : "=")"
-                    
+        return (
+            result: accumulator.result ?? pendingBinaryOperation?.firstPart.result,
+            isPending: pendingBinaryOperation != nil,
+            description: (pendingBinaryOperation?.firstPart.description ?? "") + accumulator.description + "\(pendingBinaryOperation != nil ? "..." : "=")",
+            error: accumulator.error ?? pendingBinaryOperation?.firstPart.error
         )
     }
     

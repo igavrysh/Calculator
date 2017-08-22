@@ -15,14 +15,11 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var log: UILabel!
+    @IBOutlet weak var errorDisplay: UILabel!
     
     var userIsInTheMiddleOfTyping = false
     
     var variables: [String: Double]?
-    
-    override func viewDidLoad() {
-        //self.touchedSequence = "0"
-    }
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
@@ -81,7 +78,7 @@ class ViewController: UIViewController {
     private var brain = CalculatorBrain()
     
     private func process() {
-        let expression = self.brain.evaluate(using: self.variables)
+        let expression = self.brain.evaluateWithLogging(using: self.variables)
         
         guard let result = expression.result else {
             self.touchedSequence = "0"
@@ -93,6 +90,7 @@ class ViewController: UIViewController {
         
         self.displayValue = result
         self.log.text = expression.description
+        self.errorDisplay.text = expression.error.map { "Error: " + $0 }
     }
     
     private func addVariable(name: String, value: Double) {
