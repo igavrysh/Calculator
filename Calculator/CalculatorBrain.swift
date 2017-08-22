@@ -78,14 +78,17 @@ struct CalculatorBrain {
         addOperand(Operand.variable(named))
     }
     
+    @available(iOS, deprecated, message: "Depreciated, use evaluate(using:) for getting results")
     var result: Double? {
         return evaluate().result
     }
     
+    @available(iOS, deprecated, message: "Depreciated, use evaluate(using:) for getting results")
     var description: String? {
         return evaluate().description
     }
     
+    @available(iOS, deprecated, message: "Depreciated, use evaluate(using:) for getting results")
     var resultIsPending: Bool {
         return evaluate().isPending
     }
@@ -198,7 +201,7 @@ struct CalculatorBrain {
     }
     
     mutating func undo() {
-        if self.resultIsPending {
+        if self.evaluate().isPending {
             self.operations.removeLast()
             
             return
