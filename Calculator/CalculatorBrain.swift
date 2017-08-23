@@ -71,8 +71,8 @@ struct CalculatorBrain {
     
     private static let argCheckFor: [String: ArgCheck] = [
         "√" : ArgCheck.unaryOperationCheck({ $0 < 0 ? "Complex result" : nil }),
-        "1/" : ArgCheck.unaryOperationCheck({ $0 == 0 ? "Not finite result, one over zero" : nil }),
-        "÷" : ArgCheck.binaryOperationCheck({ $1 == 0 ? "Not finite result, division by zero" : nil })
+        "1/" : ArgCheck.unaryOperationCheck({ $0 == 0 ? "Not a finite result, one over zero" : nil }),
+        "÷" : ArgCheck.binaryOperationCheck({ $1 == 0 ? "Not a finite result, division by zero" : nil })
     ]
     
     // MARK: -
@@ -122,36 +122,45 @@ struct CalculatorBrain {
                 description: evalResult.description)
     }
     
+    typealias Accumulator = (result: Double?, description: String, error: String?)
+    private static let AccumulatorEmpty = Accumulator(result: nil, description: "", error:nil)
+    private static let isAccumulatorEmpty = { (acc: Accumulator) -> Bool in acc.result == nil }
+    
     func evaluateWithLogging(using variables: Dictionary<String, Double>? = nil)
         -> (result: Double?, isPending: Bool, description: String, error: String?)
     {
         var ops = self.operations
         var oprnds = self.operands
         
-        var accumulator: (result: Double?, description: String, error: String?) = (result: nil, description: "", error:nil)
+        var accumulator: Accumulator = CalculatorBrain.AccumulatorEmpty
         var pendingBinaryOperation: PendingBinartyOperaion?
         
         struct PendingBinartyOperaion {
             let function: (Double, Double) -> Double
             let functionDesc: String
-            let firstPart: (result: Double?, description: String, error: String?)
+            let firstPart: Accumulator
             
-            func perform(with secondPart: (result: Double?, description: String, error: String?),
-                         variables: [String: Double]?) -> (result: Double?, description: String, error: String?)
-            {
-                return lift((firstPart.result, secondPart.result)).map { arg1, arg2 in
-                    (result: function(arg1, arg2),
-                     description: "\(firstPart.description)\(secondPart.description)",
-                        error: firstPart.error ?? CalculatorBrain.argCheckFor[functionDesc]
-                            .map { (argCheck: ArgCheck) in
-                                if case ArgCheck.binaryOperationCheck(let function) = argCheck {
-                                    return function(arg1, arg2)!
-                                }
-                                
-                                return ""
-                        })
+            func perform(with secondPart: Accumulator, variables: [String: Double]?) -> Accumulator {
+                let liftedArgs = lift((firstPart.result, secondPart.result))
+                
+                let performedOperation = liftedArgs.map { arg1, arg2 -> Accumulator in
+                    
+                    let error = CalculatorBrain.argCheckFor[functionDesc].flatMap { (argCheck: ArgCheck) -> String? in
+                        if case ArgCheck.binaryOperationCheck(let function) = argCheck {
+                            return function(arg1, arg2)
+                        }
+                        
+                        return nil
                     }
-                    ?? (result:nil, description: "", error: nil)
+                    
+                    return Accumulator(
+                        result: function(arg1, arg2),
+                        description: "\(firstPart.description)\(secondPart.description)",
+                        error: firstPart.error ?? error
+                    )
+                }
+                
+                return performedOperation ?? (result:nil, description: "", error: nil)
             }
         }
         
@@ -173,34 +182,33 @@ struct CalculatorBrain {
             }
         }
         
-        //var error: String? = nil
-        
         repeat {
             ops.dequeue().map { (operationSymbol: String) in
                 self.availableOperations[operationSymbol].do {
                     switch $0 {
                     case .constant(let value):
                         accumulator
-                            = (result: value, description: "\(operationSymbol)", error: nil)
+                            = Accumulator(result: value, description: "\(operationSymbol)", error: nil)
                         
                     case .genOperation(let function):
-                        accumulator = (result: function(), description: "\(operationSymbol)", error: nil)
+                        accumulator = Accumulator(result: function(), description: "\(operationSymbol)", error: nil)
                         
                     case .unaryOperation(let function):
                         fetchOperand()
                         
                         lift(accumulator).do { arg, dsc, error in
                             accumulator
-                                = (
+                                = Accumulator(
                                     result: function(arg),
                                     description: "\(operationSymbol)(\(dsc))",
-                                    error: error ?? CalculatorBrain.argCheckFor[operationSymbol]
-                                            .map { (argCheck: ArgCheck) in
+                                    error: error
+                                        ?? CalculatorBrain.argCheckFor[operationSymbol]
+                                            .flatMap { (argCheck: ArgCheck) in
                                                 if case ArgCheck.unaryOperationCheck(let function) = argCheck {
-                                                    return function(arg)!
+                                                    return function(arg)
                                                 }
                                                 
-                                                return ""
+                                                return nil
                                     }
                             )
                         }
@@ -213,9 +221,10 @@ struct CalculatorBrain {
                         pendingBinaryOperation = PendingBinartyOperaion(
                             function: function,
                             functionDesc: operationSymbol,
-                            firstPart: (result: accumulator.result,
-                                        description: accumulator.description + operationSymbol,
-                                        error: accumulator.error)
+                            firstPart: Accumulator(
+                                result: accumulator.result,
+                                description: accumulator.description + operationSymbol,
+                                error: accumulator.error)
                         )
                         
                         accumulator = (result: nil, description: "", error: nil)
@@ -239,7 +248,9 @@ struct CalculatorBrain {
         return (
             result: accumulator.result ?? pendingBinaryOperation?.firstPart.result,
             isPending: pendingBinaryOperation != nil,
-            description: (pendingBinaryOperation?.firstPart.description ?? "") + accumulator.description + "\(pendingBinaryOperation != nil ? "..." : "=")",
+            description: (pendingBinaryOperation?.firstPart.description ?? "")
+                + accumulator.description
+                + "\(pendingBinaryOperation != nil ? "..." : "=")",
             error: accumulator.error ?? pendingBinaryOperation?.firstPart.error
         )
     }
