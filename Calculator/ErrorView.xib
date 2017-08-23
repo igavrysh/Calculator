@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ErrorView" customModule="Calculator" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="345" height="66"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error message placeholder" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E2q-ZB-BM9">
+                    <rect key="frame" x="16" y="0.0" width="283" height="66"/>
+                    <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OX4-Bz-qKP">
+                    <rect key="frame" x="310" y="8.5" width="35" height="49"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="35" id="KKD-nn-Qzt"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="31"/>
+                    <state key="normal" title="⊗"/>
+                    <connections>
+                        <action selector="onCloseClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="zYw-xm-Ijl"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.50196081400000003" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="E2q-ZB-BM9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3NU-rG-HOy"/>
+                <constraint firstItem="OX4-Bz-qKP" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="5aB-se-SDf"/>
+                <constraint firstItem="OX4-Bz-qKP" firstAttribute="leading" secondItem="E2q-ZB-BM9" secondAttribute="trailing" constant="11" id="Haf-pp-EUx"/>
+                <constraint firstItem="E2q-ZB-BM9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="W07-Vc-rQB"/>
+                <constraint firstAttribute="trailing" secondItem="OX4-Bz-qKP" secondAttribute="trailing" id="iCq-fQ-3XU"/>
+                <constraint firstAttribute="bottom" secondItem="E2q-ZB-BM9" secondAttribute="bottom" id="ue1-G0-uEi"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="cancelButton" destination="OX4-Bz-qKP" id="2Ba-UM-ugn"/>
+                <outlet property="displayError" destination="E2q-ZB-BM9" id="MK7-BJ-b7p"/>
+            </connections>
+            <point key="canvasLocation" x="10.5" y="-248"/>
+        </view>
+    </objects>
+</document>
