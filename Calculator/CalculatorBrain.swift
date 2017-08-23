@@ -187,8 +187,7 @@ struct CalculatorBrain {
                 self.availableOperations[operationSymbol].do {
                     switch $0 {
                     case .constant(let value):
-                        accumulator
-                            = Accumulator(result: value, description: "\(operationSymbol)", error: nil)
+                        accumulator = Accumulator(result: value, description: "\(operationSymbol)", error: nil)
                         
                     case .genOperation(let function):
                         accumulator = Accumulator(result: function(), description: "\(operationSymbol)", error: nil)

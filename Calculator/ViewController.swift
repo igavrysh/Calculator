@@ -15,11 +15,22 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var log: UILabel!
-    @IBOutlet weak var errorDisplay: UILabel!
+    @IBOutlet weak var stackView: UIStackView!
+    var errorView: ErrorView!
     
     var userIsInTheMiddleOfTyping = false
     
     var variables: [String: Double]?
+    
+    override func viewDidLoad() {
+        if let errorView = Bundle.main.loadNibNamed("ErrorView", owner: self, options: nil)?.last as? ErrorView {
+            self.errorView = errorView
+            self.errorView.stackView = self.stackView
+            self.errorView.onCloseProcessor  = { [weak self] button in
+                self?.performClean(button)
+            }
+        }
+    }
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
@@ -70,9 +81,7 @@ class ViewController: UIViewController {
     }
     
     var isDecimalValue: Bool {
-        get {
-            return abs(displayValue - floor(displayValue)) > 0
-        }
+        return abs(displayValue - floor(displayValue)) > 0
     }
     
     private var brain = CalculatorBrain()
@@ -90,7 +99,7 @@ class ViewController: UIViewController {
         
         self.displayValue = result
         self.log.text = expression.description
-        self.errorDisplay.text = expression.error.map { "Error: " + $0 }
+        self.errorView.text = expression.error.map { "Error: " + $0 }
     }
     
     private func addVariable(name: String, value: Double) {
@@ -121,6 +130,7 @@ class ViewController: UIViewController {
         self.userIsInTheMiddleOfTyping = false
         self.displayValue = 0
         self.variables = nil
+        self.errorView.text = nil
         log.text = " "
     }
     
