@@ -23,26 +23,24 @@ class ViewController: UIViewController {
     var variables: [String: Double]?
     
     override func viewDidLoad() {
-        if let errorView = Bundle.main.loadNibNamed("ErrorView", owner: self, options: nil)?.last as? ErrorView {
-            self.errorView = errorView
-            self.errorView.stackView = self.stackView
-            self.errorView.onCloseProcessor  = { [weak self] button in
-                self?.performClean(button)
-            }
-        }
+        self.displayValue = 0
+        
+        addErrorView()
     }
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
-
-        if self.touchedSequence?.contains(decimalSymbol) == true
-            && digit == decimalSymbol
-        {
+        let isDecimalSymbol = digit == decimalSymbol
+        
+        if isDecimalSymbol && (self.touchedSequence.map { $0.contains(decimalSymbol) }) == true {
             return
         }
 
         if userIsInTheMiddleOfTyping {
             self.touchedSequence = self.touchedSequence! + digit
+        } else if isDecimalSymbol {
+            self.touchedSequence = self.touchedSequence! + digit
+            userIsInTheMiddleOfTyping = true
         } else {
             self.touchedSequence = digit
             userIsInTheMiddleOfTyping = true
@@ -114,12 +112,26 @@ class ViewController: UIViewController {
         process()
     }
     
+    private func addErrorView() {
+        let errorView = Bundle.main.loadNibNamed("ErrorView", owner: self, options: nil)?.last as? ErrorView
+        
+        errorView.do { [weak self] errorView in
+            self.do {
+                $0.errorView = errorView
+                $0.errorView.stackView = $0.stackView
+                $0.errorView.onCloseProcessor  = { [weak self] button in
+                    self.do { $0.performClean(button) }
+                }
+            }
+        }
+    }
+    
     @IBAction func performOperation(_ sender: UIButton) {
-        if userIsInTheMiddleOfTyping {
+        if userIsInTheMiddleOfTyping || self.displayValue == 0 {
             brain.setOperand(displayValue)
             userIsInTheMiddleOfTyping = false
         }
-        
+
         sender.currentTitle.do { self.brain.performOperation($0)}
         
         process()
