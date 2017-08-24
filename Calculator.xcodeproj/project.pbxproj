@@ -27,6 +27,12 @@
 		E0875E051F4EF52E00950CDF /* VariablesViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */; };
 		E0875E061F4EF52F00950CDF /* VariablesViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */; };
 		E0875E071F4EF5FD00950CDF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CFACDC1E82F4EC00D50C4C /* ViewController.swift */; };
+		E0875E081F4F01FA00950CDF /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CFACED1E830B7200D50C4C /* CalculatorBrain.swift */; };
+		E0875E091F4F021600950CDF /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0EFD6541F4D681C0077E827 /* ErrorView.xib */; };
+		E0875E0A1F4F021600950CDF /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0EFD6541F4D681C0077E827 /* ErrorView.xib */; };
+		E0875E0B1F4F021A00950CDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85CFACDE1E82F4EC00D50C4C /* Main.storyboard */; };
+		E0875E0C1F4F021A00950CDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85CFACDE1E82F4EC00D50C4C /* Main.storyboard */; };
+		E0875E0D1F4F022F00950CDF /* DataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = E008CFB21F1BB035009E811C /* DataStructures.swift */; };
 		E0EFD6551F4D681C0077E827 /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0EFD6541F4D681C0077E827 /* ErrorView.xib */; };
 		E0EFD6571F4D6A410077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
 		E0EFD6591F4D78240077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
@@ -284,6 +290,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0875E091F4F021600950CDF /* ErrorView.xib in Resources */,
+				E0875E0B1F4F021A00950CDF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +299,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0875E0A1F4F021600950CDF /* ErrorView.xib in Resources */,
+				E0875E0C1F4F021A00950CDF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,10 +341,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0875E081F4F01FA00950CDF /* CalculatorBrain.swift in Sources */,
 				E0875E071F4EF5FD00950CDF /* ViewController.swift in Sources */,
 				E0EFD65B1F4D784C0077E827 /* CommonFunctions.swift in Sources */,
 				E0875E061F4EF52F00950CDF /* VariablesViewGenerator.swift in Sources */,
 				E0592BFF1F4194F00097A3D5 /* CalculatorUITests.swift in Sources */,
+				E0875E0D1F4F022F00950CDF /* DataStructures.swift in Sources */,
 				E0EFD65A1F4D78240077E827 /* ErrorView.swift in Sources */,
 				E0EFD65C1F4D786C0077E827 /* Extensions.swift in Sources */,
 			);
