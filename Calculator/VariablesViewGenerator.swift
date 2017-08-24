@@ -13,7 +13,7 @@ class VariablesViewGenerator {
     static func variablesView(withTitle title: String,
                               message: String,
                               sourceView: UIView,
-                              variables: [String: Double]?,
+                              value: Double,
                               onOkHandler: @escaping ((_ sender: UIAlertController) -> Void)) -> UIAlertController
     {
         let alertController = UIAlertController(
@@ -34,7 +34,7 @@ class VariablesViewGenerator {
         )
         
         alertController.addTextField(configurationHandler: { textField in
-            textField.text = String(variables?[variableName] ?? 0.0)
+            textField.text = String(value)
             textField.textAlignment = .center
         })
         

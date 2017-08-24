@@ -24,6 +24,9 @@
 		E0592BF71F4020F90097A3D5 /* CommonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BF41F401F7C0097A3D5 /* CommonFunctions.swift */; };
 		E0592BFF1F4194F00097A3D5 /* CalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BFE1F4194F00097A3D5 /* CalculatorUITests.swift */; };
 		E0875E041F4ECEBE00950CDF /* VariablesViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */; };
+		E0875E051F4EF52E00950CDF /* VariablesViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */; };
+		E0875E061F4EF52F00950CDF /* VariablesViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */; };
+		E0875E071F4EF5FD00950CDF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CFACDC1E82F4EC00D50C4C /* ViewController.swift */; };
 		E0EFD6551F4D681C0077E827 /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0EFD6541F4D681C0077E827 /* ErrorView.xib */; };
 		E0EFD6571F4D6A410077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
 		E0EFD6591F4D78240077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
@@ -315,6 +318,7 @@
 			files = (
 				E0592BF71F4020F90097A3D5 /* CommonFunctions.swift in Sources */,
 				E0592BF61F4020F50097A3D5 /* Extensions.swift in Sources */,
+				E0875E051F4EF52E00950CDF /* VariablesViewGenerator.swift in Sources */,
 				E0592BEE1F40192D0097A3D5 /* DataStructures.swift in Sources */,
 				E0592BED1F40192A0097A3D5 /* ViewController.swift in Sources */,
 				E0EFD6591F4D78240077E827 /* ErrorView.swift in Sources */,
@@ -327,7 +331,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0875E071F4EF5FD00950CDF /* ViewController.swift in Sources */,
 				E0EFD65B1F4D784C0077E827 /* CommonFunctions.swift in Sources */,
+				E0875E061F4EF52F00950CDF /* VariablesViewGenerator.swift in Sources */,
 				E0592BFF1F4194F00097A3D5 /* CalculatorUITests.swift in Sources */,
 				E0EFD65A1F4D78240077E827 /* ErrorView.swift in Sources */,
 				E0EFD65C1F4D786C0077E827 /* Extensions.swift in Sources */,

@@ -141,7 +141,7 @@ class ViewController: UIViewController {
                 = VariablesViewGenerator.variablesView(withTitle: "Variable",
                                                        message: variableName + " = ",
                                                        sourceView: sourceView,
-                                                       variables: self.variables,
+                                                       value: variables?[variableName] ?? 0.0,
                                                        onOkHandler: onOkHandler)
             
             present(variablesViewController, animated: true)
