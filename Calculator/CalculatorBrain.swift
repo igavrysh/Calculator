@@ -69,10 +69,30 @@ struct CalculatorBrain {
         "=" : Operation.equals
     ]
     
+    private static var nanCheck: (Double) -> String? = { (arg: Double) in
+        return arg.isNaN ? "argument is not a number" : nil
+    }
+    
+    private static var nanCheckForBinary: (Double, Double) -> String? =  { (arg1: Double, arg2: Double) in
+        return [arg1, arg2].deriveFirstRes(f: CalculatorBrain.nanCheck)
+    }
+    
+    private static var infiniteCheck: (Double) -> String? = { (arg: Double) in
+        return arg.isInfinite ? "argument is infinite" : nil
+    }
+    
+    private static var infiniteCheckForBinary: (Double, Double) -> String? = { (arg1: Double, arg2: Double) in
+        return [arg1, arg2].deriveFirstRes(f: CalculatorBrain.infiniteCheck)
+    }
+    
     private static let argCheckFor: [String: ArgCheck] = [
-        "√" : ArgCheck.unaryOperationCheck({ $0 < 0 ? "Complex result" : nil }),
-        "1/" : ArgCheck.unaryOperationCheck({ $0 == 0 ? "Not a finite result, one over zero" : nil }),
-        "÷" : ArgCheck.binaryOperationCheck({ $1 == 0 ? "Not a finite result, division by zero" : nil })
+        "√" : ArgCheck.unaryOperationCheck({ $0 < 0 ? "complex result" : nil }),
+        "1/" : ArgCheck.unaryOperationCheck({ $0 == 0 ? "not a finite result, one over zero" : nil }),
+        "÷" : ArgCheck.binaryOperationCheck({ $1 == 0 ? "not a finite result, division by zero" : nil }),
+        "×" : ArgCheck.binaryOperationCheck({ (arg1, arg2) in
+            return [nanCheckForBinary, infiniteCheckForBinary].flatMap { $0(arg1, arg2) }
+                .joinedWithNilEscaping(separator: ", ")
+        })
     ]
     
     // MARK: -
@@ -90,12 +110,12 @@ struct CalculatorBrain {
         addOperand(Operand.variable(named))
     }
     
-    @available(iOS, deprecated, message: "Depreciated, use evaluate(using:) for getting results")
+    @available(iOS, deprecated, message: "use evaluate(using:) for getting results")
     var result: Double? {
         return evaluate().result
     }
     
-    @available(iOS, deprecated, message: "Depreciated, use evaluate(using:) for getting results")
+    @available(iOS, deprecated, message: "use evaluate(using:) for getting results")
     var description: String? {
         return evaluate().description
     }

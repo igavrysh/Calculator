@@ -83,3 +83,25 @@ extension String {
         return formattedDouble
     }
 }
+
+extension Array {
+    func deriveFirstRes<T,A>(f: @escaping (T) -> A?) -> A? {
+        return self
+            .map { ($0 as? T).flatMap { f($0) } }
+            .reduce(nil) { (res: A?, arg:A?) -> A? in
+                return res ?? arg
+        }
+    }
+}
+
+extension Array where Iterator.Element == String  {
+    func joinedWithNilEscaping(separator: String = "") -> String? {
+        return self.reduce(nil) { (acc: String?, string: String) -> String? in
+            if let acc = acc {
+                return acc + separator + string
+            }
+            
+            return string
+        }
+    }
+}
