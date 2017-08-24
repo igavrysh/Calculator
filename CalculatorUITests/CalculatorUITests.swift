@@ -357,4 +357,22 @@ class CalculatorUITests: XCTestCase {
         XCTAssert(self.display == "-1")
         XCTAssert(self.desc == "cos(M)=")
     }
+    
+    func textAppStartCase1() {
+        self.minusOperaionButton.tap()
+        self.oneDigitButton.tap()
+        self.equalsOperationButton.tap()
+        XCTAssert(self.display == "-1")
+        XCTAssert(self.desc == "0-1=")
+    }
+    
+    func textAppStartCase2() {
+        self.decimalPointButton.tap()
+        self.oneDigitButton.tap()
+        self.plusOperationButton.tap()
+        self.oneDigitButton.tap()
+        self.equalsOperationButton.tap()
+        XCTAssert(self.display == "1.1")
+        XCTAssert(self.desc == "0.1+1=")
+    }
 }
