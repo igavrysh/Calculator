@@ -23,6 +23,7 @@
 		E0592BF61F4020F50097A3D5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BF21F401F4C0097A3D5 /* Extensions.swift */; };
 		E0592BF71F4020F90097A3D5 /* CommonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BF41F401F7C0097A3D5 /* CommonFunctions.swift */; };
 		E0592BFF1F4194F00097A3D5 /* CalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BFE1F4194F00097A3D5 /* CalculatorUITests.swift */; };
+		E0875E041F4ECEBE00950CDF /* VariablesViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */; };
 		E0EFD6551F4D681C0077E827 /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0EFD6541F4D681C0077E827 /* ErrorView.xib */; };
 		E0EFD6571F4D6A410077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
 		E0EFD6591F4D78240077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
@@ -66,6 +67,7 @@
 		E0592BFC1F4194F00097A3D5 /* CalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0592BFE1F4194F00097A3D5 /* CalculatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUITests.swift; sourceTree = "<group>"; };
 		E0592C001F4194F00097A3D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariablesViewGenerator.swift; sourceTree = "<group>"; };
 		E0EFD6541F4D681C0077E827 /* ErrorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ErrorView.xib; sourceTree = "<group>"; };
 		E0EFD6561F4D6A410077E827 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -120,6 +122,7 @@
 			children = (
 				E0EFD6541F4D681C0077E827 /* ErrorView.xib */,
 				E0EFD6561F4D6A410077E827 /* ErrorView.swift */,
+				E0875E031F4ECEBE00950CDF /* VariablesViewGenerator.swift */,
 				E0592BF41F401F7C0097A3D5 /* CommonFunctions.swift */,
 				E0592BF21F401F4C0097A3D5 /* Extensions.swift */,
 				85CFACED1E830B7200D50C4C /* CalculatorBrain.swift */,
@@ -295,6 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0875E041F4ECEBE00950CDF /* VariablesViewGenerator.swift in Sources */,
 				E0592BF51F401F7C0097A3D5 /* CommonFunctions.swift in Sources */,
 				E0592BF31F401F4C0097A3D5 /* Extensions.swift in Sources */,
 				E008CFB31F1BB035009E811C /* DataStructures.swift in Sources */,

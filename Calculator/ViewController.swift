@@ -126,6 +126,28 @@ class ViewController: UIViewController {
         }
     }
     
+    private func presentVariablesView(sourceView: UIView?) {
+        sourceView.do { sourceView in
+            
+            let onOkHandler: (_ sender: UIAlertController) -> Void = { alertController in
+                alertController.textFields?[0].text.do { [weak self] textValue in
+                    self.do {
+                        $0.addVariable(name: variableName, value: Double(textValue) ?? 0.0)
+                    }
+                }
+            }
+            
+            let variablesViewController
+                = VariablesViewGenerator.variablesView(withTitle: "Variable",
+                                                       message: variableName + " = ",
+                                                       sourceView: sourceView,
+                                                       variables: self.variables,
+                                                       onOkHandler: onOkHandler)
+            
+            present(variablesViewController, animated: true)
+        }
+    }
+    
     @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping || self.displayValue == 0 {
             brain.setOperand(displayValue)
@@ -184,34 +206,6 @@ class ViewController: UIViewController {
     @IBAction func varaiblesListLongPress(_ sender: UILongPressGestureRecognizer) {
         print("varaibles list long press")
         
-        sender.view.do { view in
-            let alertController = UIAlertController(
-                title: "Variable",
-                message: variableName + "=",
-                preferredStyle: UIAlertControllerStyle.alert
-            )
-            
-            alertController.popoverPresentationController?.sourceView = view
-            alertController.popoverPresentationController?.sourceRect =  view.bounds
-            
-            let okAction = UIAlertAction(
-                title: "OK",
-                style: UIAlertActionStyle.default,
-                handler: { (alert :UIAlertAction!) in
-                    alertController.textFields?[0].text.do { [weak self] textValue in
-                        self.do { $0.addVariable(name: variableName, value: Double(textValue) ?? 0.0) }
-                    }
-            }
-            )
-            
-            alertController.addTextField(configurationHandler: { textField in
-                textField.text = String(self.variables?[variableName] ?? 0.0)
-                textField.textAlignment = .center
-            })
-            
-            alertController.addAction(okAction)
-            
-            present(alertController, animated: true, completion: nil)
-        }
+        self.presentVariablesView(sourceView: sender.view)
     }
 }
