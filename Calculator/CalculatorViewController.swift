@@ -11,7 +11,7 @@ import UIKit
 let variableName = "M"
 let decimalSymbol = "."
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
     
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var log: UILabel!
