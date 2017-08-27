@@ -9,5 +9,8 @@
 import UIKit
 
 class GraphViewController: UIViewController {
+    var function: (Double) -> Double = { _ in 0 }
+    @IBOutlet weak var graphView: GraphView!
     
+
 }

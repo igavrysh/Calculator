@@ -26,6 +26,8 @@ class CalculatorViewController: UIViewController {
         self.displayValue = 0
         
         addErrorView()
+        
+        addLogLabel()
     }
     
     @IBAction func touchDigit(_ sender: UIButton) {
@@ -97,7 +99,9 @@ class CalculatorViewController: UIViewController {
         
         self.displayValue = result
         self.log.text = expression.description
-        self.errorView.text = expression.error.map { "Error: " + $0 }
+        self.errorView.text = expression.error.map {
+            "Error: " + $0
+        }
     }
     
     private func addVariable(name: String, value: Double) {
@@ -146,6 +150,34 @@ class CalculatorViewController: UIViewController {
             
             present(variablesViewController, animated: true)
         }
+    }
+    
+    private func addLogLabel() {
+        let log = AdaptiveLabel.init(frame: CGRect(x:0, y:0, width: 800, height: 40))
+        log.backgroundColor = UIColor.black
+        log.textAlignment = .right
+        log.textColor = UIColor.white
+        log.font = UIFont.systemFont(ofSize: 50, weight: UIFontWeightUltraLight)
+        log.minimumScaleFactor = 0.2
+        log.lineBreakMode = .byTruncatingHead
+        log.adjustsFontSizeToFitWidth = true
+        log.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        log.numberOfLines = 1
+        log.text = ""
+        
+        self.log = log
+        
+        self.navigationController.do {
+            $0.navigationBar.topItem.do {
+                
+                
+                $0.titleView = log
+            }
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     @IBAction func performOperation(_ sender: UIButton) {
@@ -207,5 +239,12 @@ class CalculatorViewController: UIViewController {
         print("varaibles list long press")
         
         self.presentVariablesView(sourceView: sender.view)
+    }
+    
+    
+    @IBAction func onGraphTouch(_ sender: UIButton) {
+        let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+        let graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController")
+        self.navigationController?.pushViewController(graphViewController, animated: true)
     }
 }
