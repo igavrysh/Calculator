@@ -9,8 +9,7 @@
 
 import UIKit
 
-struct AxesDrawer
-{
+struct AxesDrawer {
     var color: UIColor
     var contentScaleFactor: CGFloat             // set this from UIView's contentScaleFactor to position axes with maximum accuracy
     var minimumPointsPerHashmark: CGFloat = 40  // public even though init doesn't accommodate setting it (it's rare to want to change it)
@@ -27,8 +26,7 @@ struct AxesDrawer
     // e.g. if you wanted there to be 100 points along an axis between -1 and 1,
     //    you'd set pointsPerUnit to 50
 
-    func drawAxes(in rect: CGRect, origin: CGPoint, pointsPerUnit: CGFloat)
-    {
+    func drawAxes(in rect: CGRect, origin: CGPoint, pointsPerUnit: CGFloat) {
         UIGraphicsGetCurrentContext()?.saveGState()
         color.set()
         let path = UIBezierPath()
@@ -49,10 +47,11 @@ struct AxesDrawer
     
     private let formatter = NumberFormatter() // formatter for the hashmark labels
     
-    private func drawHashmarks(in rect: CGRect, origin: CGPoint, pointsPerUnit: CGFloat)
-    {
-        if ((origin.x >= rect.minX) && (origin.x <= rect.maxX)) || ((origin.y >= rect.minY) && (origin.y <= rect.maxY))
-        {
+    private func drawHashmarks(in rect: CGRect, origin: CGPoint, pointsPerUnit: CGFloat) {
+        if ((origin.x >= rect.minX)
+            && (origin.x <= rect.maxX))
+            || ((origin.y >= rect.minY)
+                && (origin.y <= rect.maxY)) {
             // figure out how many units each hashmark must represent
             // to respect both pointsPerUnit and minimumPointsPerHashmark
             var unitsPerHashmark = minimumPointsPerHashmark / pointsPerUnit
@@ -83,8 +82,7 @@ struct AxesDrawer
             var bbox = CGRect(center: origin, size: CGSize(width: bboxSize, height: bboxSize))
 
             // radiate the bbox out until the hashmarks are further out than the rect
-            while !bbox.contains(rect)
-            {
+            while !bbox.contains(rect) {
                 let label = formatter.string(from: (origin.x-bbox.minX)/pointsPerUnit)!
                 if let leftHashmarkPoint = CGPoint(x: bbox.minX, y: origin.y).aligned(inside: rect, usingScaleFactor: contentScaleFactor) {
                     drawHashmark(at: leftHashmarkPoint, label: .top("-\(label)"))
@@ -103,8 +101,7 @@ struct AxesDrawer
         }
     }
     
-    private func drawHashmark(at location: CGPoint, label: AnchoredText)
-    {
+    private func drawHashmark(at location: CGPoint, label: AnchoredText) {
         var dx: CGFloat = 0, dy: CGFloat = 0
         switch label {
             case .left: dx = Constants.hashmarkSize / 2
@@ -121,8 +118,7 @@ struct AxesDrawer
         label.draw(at: location, usingColor: color)
     }
     
-    private enum AnchoredText
-    {
+    private enum AnchoredText {
         case left(String)
         case right(String)
         case top(String)
@@ -157,10 +153,8 @@ struct AxesDrawer
     }
 }
 
-private extension CGPoint
-{
-    func aligned(inside bounds: CGRect? = nil, usingScaleFactor scaleFactor: CGFloat = 1.0) -> CGPoint?
-    {
+private extension CGPoint {
+    func aligned(inside bounds: CGRect? = nil, usingScaleFactor scaleFactor: CGFloat = 1.0) -> CGPoint? {
         func align(_ coordinate: CGFloat) -> CGFloat {
             return round(coordinate * scaleFactor) / scaleFactor
         }
@@ -172,15 +166,13 @@ private extension CGPoint
     }
 }
 
-private extension NumberFormatter
-{
+private extension NumberFormatter {
     func string(from point: CGFloat) -> String? {
         return string(from: NSNumber(value: Double(point)))
     }
 }
 
-private extension CGRect
-{
+private extension CGRect {
     init(center: CGPoint, size: CGSize) {
         self.init(x: center.x-size.width/2, y: center.y-size.height/2, width: size.width, height: size.height)
     }

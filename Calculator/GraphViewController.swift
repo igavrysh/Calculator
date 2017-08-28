@@ -8,9 +8,15 @@
 
 import UIKit
 
-class GraphViewController: UIViewController {
-    var function: (Double) -> Double = { _ in 0 }
+class GraphViewController: UIViewController, GraphViewSource {
+    public var function: (Double) -> Double = { _ in 0 }
     @IBOutlet weak var graphView: GraphView!
     
-
+    override func viewDidLoad() {
+        self.graphView.dataSource = self
+    }
+    
+    func valueForX(_ x: Double) -> Double {
+        return function(x)
+    }
 }

@@ -11,8 +11,8 @@ import UIKit
 let variableName = "M"
 let decimalSymbol = "."
 
-class CalculatorViewController: UIViewController {
-    
+class CalculatorViewController: UIViewController
+{
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var log: UILabel!
     @IBOutlet weak var stackView: UIStackView!
@@ -158,7 +158,7 @@ class CalculatorViewController: UIViewController {
         log.textAlignment = .right
         log.textColor = UIColor.white
         log.font = UIFont.systemFont(ofSize: 50, weight: UIFontWeightUltraLight)
-        log.minimumScaleFactor = 0.2
+        log.minimumScaleFactor = 0.5
         log.lineBreakMode = .byTruncatingHead
         log.adjustsFontSizeToFitWidth = true
         log.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -244,7 +244,17 @@ class CalculatorViewController: UIViewController {
     
     @IBAction func onGraphTouch(_ sender: UIButton) {
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController")
-        self.navigationController?.pushViewController(graphViewController, animated: true)
+        let graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController") as? GraphViewController
+        
+        graphViewController.do { [weak self] controller in
+            controller.function = { [weak self] x in
+                return self.map { $0.brain.evaluate(using: [variableName: x]).result ?? 0 } ?? 0
+            }
+            
+            self.do {
+                $0.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
     }
+    
 }
