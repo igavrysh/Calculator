@@ -18,7 +18,6 @@
 		E01F14EB1F524A9F00A868C9 /* GlobalSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01F14EA1F524A9F00A868C9 /* GlobalSplitViewController.swift */; };
 		E0592BE51F4017EA0097A3D5 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BE41F4017EA0097A3D5 /* CalculatorTests.swift */; };
 		E0592BEC1F4019270097A3D5 /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CFACED1E830B7200D50C4C /* CalculatorBrain.swift */; };
-		E0592BED1F40192A0097A3D5 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CFACDC1E82F4EC00D50C4C /* CalculatorViewController.swift */; };
 		E0592BEE1F40192D0097A3D5 /* DataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = E008CFB21F1BB035009E811C /* DataStructures.swift */; };
 		E0592BF31F401F4C0097A3D5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BF21F401F4C0097A3D5 /* Extensions.swift */; };
 		E0592BF51F401F7C0097A3D5 /* CommonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0592BF41F401F7C0097A3D5 /* CommonFunctions.swift */; };
@@ -38,6 +37,11 @@
 		E0875E0F1F4F79FD00950CDF /* AxesDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E0E1F4F79FD00950CDF /* AxesDrawer.swift */; };
 		E0875E111F4F812000950CDF /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E101F4F812000950CDF /* GraphView.swift */; };
 		E0AEB7771F52C83B003EF6D1 /* AdaptiveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AEB7761F52C83B003EF6D1 /* AdaptiveLabel.swift */; };
+		E0AEB7781F540FB2003EF6D1 /* AdaptiveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AEB7761F52C83B003EF6D1 /* AdaptiveLabel.swift */; };
+		E0AEB7791F540FB2003EF6D1 /* AdaptiveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AEB7761F52C83B003EF6D1 /* AdaptiveLabel.swift */; };
+		E0AEB77A1F540FBD003EF6D1 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01F14E81F520A1D00A868C9 /* GraphViewController.swift */; };
+		E0AEB77C1F540FD8003EF6D1 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E101F4F812000950CDF /* GraphView.swift */; };
+		E0AEB77D1F540FE7003EF6D1 /* AxesDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0875E0E1F4F79FD00950CDF /* AxesDrawer.swift */; };
 		E0EFD6551F4D681C0077E827 /* ErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0EFD6541F4D681C0077E827 /* ErrorView.xib */; };
 		E0EFD6571F4D6A410077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
 		E0EFD6591F4D78240077E827 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD6561F4D6A410077E827 /* ErrorView.swift */; };
@@ -347,10 +351,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0592BF71F4020F90097A3D5 /* CommonFunctions.swift in Sources */,
+				E0AEB7781F540FB2003EF6D1 /* AdaptiveLabel.swift in Sources */,
 				E0592BF61F4020F50097A3D5 /* Extensions.swift in Sources */,
 				E0875E051F4EF52E00950CDF /* VariablesViewGenerator.swift in Sources */,
 				E0592BEE1F40192D0097A3D5 /* DataStructures.swift in Sources */,
-				E0592BED1F40192A0097A3D5 /* CalculatorViewController.swift in Sources */,
 				E0EFD6591F4D78240077E827 /* ErrorView.swift in Sources */,
 				E0592BEC1F4019270097A3D5 /* CalculatorBrain.swift in Sources */,
 				E0592BE51F4017EA0097A3D5 /* CalculatorTests.swift in Sources */,
@@ -362,7 +366,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0875E081F4F01FA00950CDF /* CalculatorBrain.swift in Sources */,
+				E0AEB77A1F540FBD003EF6D1 /* GraphViewController.swift in Sources */,
+				E0AEB7791F540FB2003EF6D1 /* AdaptiveLabel.swift in Sources */,
+				E0AEB77C1F540FD8003EF6D1 /* GraphView.swift in Sources */,
 				E0875E071F4EF5FD00950CDF /* CalculatorViewController.swift in Sources */,
+				E0AEB77D1F540FE7003EF6D1 /* AxesDrawer.swift in Sources */,
 				E0EFD65B1F4D784C0077E827 /* CommonFunctions.swift in Sources */,
 				E0875E061F4EF52F00950CDF /* VariablesViewGenerator.swift in Sources */,
 				E0592BFF1F4194F00097A3D5 /* CalculatorUITests.swift in Sources */,

@@ -154,6 +154,7 @@ class CalculatorViewController: UIViewController
     
     private func addLogLabel() {
         let log = AdaptiveLabel.init(frame: CGRect(x:0, y:0, width: 800, height: 40))
+        log.accessibilityIdentifier = "description"
         log.backgroundColor = UIColor.black
         log.textAlignment = .right
         log.textColor = UIColor.white
