@@ -72,11 +72,21 @@ class GraphView: UIView {
                 }
                 
                 let path = UIBezierPath()
-                path.move(to: calculatePoint(xOffset))
-                path.addCurve(to: calculatePoint(xOffset + 1 * delta),
-                              controlPoint1: calculatePoint(xOffset + 0.33 * delta),
-                              controlPoint2: calculatePoint(xOffset + 0.66 * delta))
-                path.stroke()
+                let start = calculatePoint(xOffset)
+                let end = calculatePoint(xOffset + 1 * delta)
+                let interim1 = calculatePoint(xOffset + 0.33 * delta)
+                let interim2 = calculatePoint(xOffset + 0.66 * delta)
+                
+                if start.y.isFinite && end.y.isFinite && interim1.y.isFinite && interim2.y.isFinite {
+                    path.move(to: start)
+                    path.addCurve(
+                        to: end,
+                        controlPoint1: interim1,
+                        controlPoint2: interim2)
+                    path.stroke()
+                }
+                
+                
             }
         }
     }
