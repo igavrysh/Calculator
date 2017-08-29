@@ -71,6 +71,19 @@ class GraphView: UIView {
                     return self.calculateScreenPointForX(x, function: function)
                 }
                 
+                lift((self.pointForScreenX(xOffset),
+                     self.pointForScreenX(xOffset + 1 * delta),
+                     self.pointForScreenX(xOffset + 0.33 * delta),
+                     self.pointForScreenX(xOffset + 0.66 * delta)))
+                    .map { tuple in
+                        let path = UIBezierPath()
+                        path.move(to: tuple.0)
+                        path.addCurve(to: tuple.1, controlPoint1: tuple.2, controlPoint2: tuple.3)
+                        path.stroke()
+                }
+                
+                
+                /*
                 let path = UIBezierPath()
                 let start = calculatePoint(xOffset)
                 let end = calculatePoint(xOffset + 1 * delta)
@@ -85,10 +98,36 @@ class GraphView: UIView {
                         controlPoint2: interim2)
                     path.stroke()
                 }
-                
-                
+                 */
             }
         }
+    }
+    
+    private func pointForScreenX(_ x: Double) -> CGPoint? {
+        return self.dataSource
+            .map { dataSource in
+                return self.calculateFor(screenPoint: CGPoint(x: x, y: 0)) { dataSource.valueForX($0) }
+            }
+            .flatMap { point in
+                return point.x.isFinite && point .y.isFinite ? point : nil
+        }
+    }
+    
+    private func transformFromScreenToOrigin() -> CGAffineTransform {
+        return CGAffineTransform
+            .init(a: 1, b: 0, c: 0, d: -1, tx: -self.origin.x, ty: self.origin.y)
+            .scaledBy(x: 1/self.pointsPerUnit, y: 1/self.pointsPerUnit)
+    }
+    
+    private func transformFromOriginToStreen() -> CGAffineTransform {
+        return self.transformFromScreenToOrigin().inverted()
+    }
+    
+    private func calculateFor(screenPoint: CGPoint, function: (Double) -> Double) -> CGPoint {
+        var point = screenPoint.applying(self.transformFromScreenToOrigin().scaledBy(x: self.pointsPerUnit, y: self.pointsPerUnit))
+        point.y = CGFloat(function(Double(point.x)))
+        
+        return point.applying(self.transformFromOriginToStreen())
     }
     
     private func calculateScreenPointForX(_ x: Double,  function: (Double) -> Double) -> CGPoint {
