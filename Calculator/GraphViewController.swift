@@ -17,6 +17,9 @@ class GraphViewController: UIViewController, GraphViewSource {
     override func viewDidLoad() {
         self.graphView.dataSource = self
         
+        self.graphView.centerOrigin()
+        
+        /*
         if (self.splitViewController?.viewControllers.count)! > 1 {
             
             if let masterController = self.splitViewController?.viewControllers[0] as? UIViewController,
@@ -31,6 +34,7 @@ class GraphViewController: UIViewController, GraphViewSource {
         } else {
             self.graphView.centerOrigin()
         }
+         */
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -89,5 +93,9 @@ class GraphViewController: UIViewController, GraphViewSource {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.moveOriginWithNewPoint = nil
+    }
+    
+    @IBAction func onDoubleTapGesture(_ sender: UITapGestureRecognizer) {
+        self.graphView.origin = sender.location(in: self.graphView)
     }
 }

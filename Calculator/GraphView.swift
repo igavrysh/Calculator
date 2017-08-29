@@ -56,6 +56,8 @@ class GraphView: UIView {
         super.awakeFromNib()
         
         setUpAxesDrawer()
+        
+        centerOrigin()
     }
     
     override func draw(_ rect: CGRect) {
