@@ -20,6 +20,8 @@ class GraphViewController: UIViewController, GraphViewSource {
         return function(x)
     }
     
+    private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
+    
     @IBAction func onPanGesture(_ sender: UIPanGestureRecognizer) {
         
         let translation = sender.translation(in: self.graphView)
@@ -28,5 +30,48 @@ class GraphViewController: UIViewController, GraphViewSource {
             x: graphView.origin.x + translation.x,
             y: graphView.origin.y + translation.y)
         
+    }
+    
+    private func graphTouchPoint(_ touches: Set<UITouch>, with event: UIEvent?) -> CGPoint? {
+        return touches.first.flatMap { [weak self] touch in
+            let touchPoint = touch.location(in: self?.view)
+                
+            return self?.graphView == self?.view.hitTest(touchPoint, with: event)
+                ? touchPoint
+                : nil
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.graphTouchPoint(touches, with: event).do { [weak self] initialTouchPoint in
+            self.do {
+                
+                print("Touch began")
+                
+                let initialOriginPoint = $0.graphView.origin
+                
+                $0.moveOriginWithNewPoint = { [weak self] point in
+                    self.do {
+                        print("Initial touch point: \(initialTouchPoint)")
+                        
+                        $0.graphView.origin = CGPoint(
+                            x: initialOriginPoint.x + (point.x - initialTouchPoint.x),
+                            y: initialOriginPoint.y + (point.y - initialTouchPoint.y)
+                        )
+                    }
+                }
+            }
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        lift((self.graphTouchPoint(touches, with: event), self.moveOriginWithNewPoint))
+            .do { touchPoint, functor in
+                functor(touchPoint)
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.moveOriginWithNewPoint = nil
     }
 }
