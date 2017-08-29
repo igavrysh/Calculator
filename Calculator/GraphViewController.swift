@@ -31,9 +31,9 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
     }
     
     override func viewDidLoad() {
-        self.graphView.dataSource = self
+        super.viewDidLoad()
         
-        self.graphView.centerOrigin()
+        self.graphView.dataSource = self
         
         addLogLabel()
     }
@@ -50,10 +50,11 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
         
         let translation = sender.translation(in: self.graphView)
         
-        self.graphView.origin = CGPoint(
-            x: graphView.origin.x + translation.x,
-            y: graphView.origin.y + translation.y)
-        
+        graphView.origin.do { origin in
+            self.graphView.origin = CGPoint(
+                x: origin.x + translation.x,
+                y: origin.y + translation.y)
+        }
     }
     
     private func graphTouchPoint(_ touches: Set<UITouch>, with event: UIEvent?) -> CGPoint? {
@@ -67,8 +68,9 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
     }
     
     private func addLogLabel() {
+        /*
         let log = AdaptiveLabel.init(frame: CGRect(x:0, y:0, width: 800, height: 40))
-        log.accessibilityIdentifier = "description"
+        log.accessibilityIdentifier = "lala"
         log.backgroundColor = UIColor.black
         log.textAlignment = .right
         log.textColor = UIColor.white
@@ -81,10 +83,10 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
         log.text = self.titleDescription
         
         self.log = log
-        
+        */
         self.navigationController.do {
-            $0.navigationBar.topItem.do {
-                $0.titleView = log
+            $0.navigationBar.topItem.do { _ in
+                //$0.titleView = log
             }
         }
     }
@@ -92,7 +94,9 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.graphTouchPoint(touches, with: event).do { [weak self] initialTouchPoint in
             self.do {
-                let initialOriginPoint = $0.graphView.origin
+                guard let initialOriginPoint = $0.graphView.origin else {
+                    return
+                }
                 
                 $0.moveOriginWithNewPoint = { [weak self] point in
                     self.do {

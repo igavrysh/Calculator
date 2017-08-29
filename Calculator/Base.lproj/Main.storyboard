@@ -55,7 +55,7 @@
             <objects>
                 <navigationController id="lFg-Ae-dvy" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="ffE-1N-jJc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ffE-1N-jJc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">

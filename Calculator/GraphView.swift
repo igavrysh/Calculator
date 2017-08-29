@@ -30,7 +30,7 @@ class GraphView: UIView {
     let sampleGraph = SampleGraph()
     
     @IBInspectable
-    public var origin: CGPoint = CGPoint(x: 0, y: 0) {
+    public var origin: CGPoint? {
         didSet {
             self.setNeedsDisplay()
         }
@@ -52,8 +52,6 @@ class GraphView: UIView {
         super.init(frame: frame)
         
         setUpAxesDrawer()
-        
-        centerOrigin()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,8 +62,6 @@ class GraphView: UIView {
         super.awakeFromNib()
         
         setUpAxesDrawer()
-        
-        centerOrigin()
     }
     
     override func draw(_ rect: CGRect) {
@@ -76,8 +72,12 @@ class GraphView: UIView {
             setUpAxesDrawer()
         }
         
-        self.axesDrawer.do {
-            $0.drawAxes(in: rect, origin: self.origin, pointsPerUnit: self.pointsPerUnit)
+        if self.origin == nil {
+            centerOrigin()
+        }
+        
+        lift((self.axesDrawer, self.origin)).do { drawer, origin in
+            drawer.drawAxes(in: rect, origin: origin, pointsPerUnit: self.pointsPerUnit)
         }
         
         self.graphCurveColor.setStroke()
@@ -129,13 +129,17 @@ class GraphView: UIView {
     }
     
     private func transformFromScreenToOrigin() -> CGAffineTransform {
+        guard let origin = self.origin else {
+            return CGAffineTransform.identity
+        }
+        
         return CGAffineTransform
             .init(a: 1 / self.pointsPerUnit,
                   b: 0,
                   c: 0,
                   d: -1 / self.pointsPerUnit,
-                  tx: -self.origin.x / self.pointsPerUnit,
-                  ty: self.origin.y / self.pointsPerUnit)
+                  tx: -origin.x / self.pointsPerUnit,
+                  ty: origin.y / self.pointsPerUnit)
     }
     
     private func transformFromOriginToStreen() -> CGAffineTransform {

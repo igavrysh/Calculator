@@ -14,7 +14,7 @@ let decimalSymbol = "."
 class CalculatorViewController: UIViewController
 {
     @IBOutlet weak var display: UILabel!
-    @IBOutlet weak var log: UILabel!
+    @IBOutlet var log: UILabel!
     @IBOutlet weak var stackView: UIStackView!
     var errorView: ErrorView!
     
@@ -23,6 +23,8 @@ class CalculatorViewController: UIViewController
     var variables: [String: Double]?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.displayValue = 0
         
         addErrorView()
@@ -155,9 +157,9 @@ class CalculatorViewController: UIViewController
     private func addLogLabel() {
         let log = AdaptiveLabel.init(frame: CGRect(x:0, y:0, width: 800, height: 40))
         log.accessibilityIdentifier = "description"
-        log.backgroundColor = UIColor.black
+        //log.backgroundColor = UIColor.black
         log.textAlignment = .right
-        log.textColor = UIColor.white
+        //log.textColor = UIColor.white
         log.font = UIFont.systemFont(ofSize: 50, weight: UIFontWeightUltraLight)
         log.minimumScaleFactor = 0.5
         log.lineBreakMode = .byTruncatingHead
@@ -170,8 +172,6 @@ class CalculatorViewController: UIViewController
         
         self.navigationController.do {
             $0.navigationBar.topItem.do {
-                
-                
                 $0.titleView = log
             }
         }
