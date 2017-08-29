@@ -10,14 +10,22 @@ import UIKit
 
 class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognizerDelegate {
     
+    @IBOutlet var log: UILabel?
     @IBOutlet var pinchGestureRecogniser: UIPinchGestureRecognizer!
     @IBOutlet var tapGestureRecogniser: UITapGestureRecognizer!
+    
+    public var function: (Double) -> Double = { _ in 0 }
+    public var titleDescription: String? {
+        didSet {
+            self.log.do {
+                $0.text = oldValue
+            }
+        }
+    }
     
     private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
     private var scaleWithValue: ((CGFloat) -> Void)? = nil
     
-    
-    public var function: (Double) -> Double = { _ in 0 }
     weak var graphView: GraphView! {
         return self.view as! GraphView
     }
@@ -27,22 +35,7 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
         
         self.graphView.centerOrigin()
         
-        /*
-        if (self.splitViewController?.viewControllers.count)! > 1 {
-            
-            if let masterController = self.splitViewController?.viewControllers[0] as? UIViewController,
-                let detailController = self.splitViewController?.viewControllers[1] as? UIViewController
-            {
-                let detailBounds = detailController.view.bounds
-                let masterBounds = masterController.view.bounds
-                
-                self.graphView.origin = CGPoint(x: (detailBounds.width - masterBounds.width ) / 2,
-                                                y: detailBounds.width / 2)
-            }
-        } else {
-            self.graphView.centerOrigin()
-        }
-         */
+        addLogLabel()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -70,6 +63,29 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
             return self?.graphView == self?.view.hitTest(touchPoint, with: event)
                 ? touchPoint
                 : nil
+        }
+    }
+    
+    private func addLogLabel() {
+        let log = AdaptiveLabel.init(frame: CGRect(x:0, y:0, width: 800, height: 40))
+        log.accessibilityIdentifier = "description"
+        log.backgroundColor = UIColor.black
+        log.textAlignment = .right
+        log.textColor = UIColor.white
+        log.font = UIFont.systemFont(ofSize: 50, weight: UIFontWeightUltraLight)
+        log.minimumScaleFactor = 0.5
+        log.lineBreakMode = .byTruncatingHead
+        log.adjustsFontSizeToFitWidth = true
+        log.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        log.numberOfLines = 1
+        log.text = self.titleDescription
+        
+        self.log = log
+        
+        self.navigationController.do {
+            $0.navigationBar.topItem.do {
+                $0.titleView = log
+            }
         }
     }
     

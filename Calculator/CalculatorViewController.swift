@@ -242,9 +242,9 @@ class CalculatorViewController: UIViewController
         self.presentVariablesView(sourceView: sender.view)
     }
     
-    
     @IBAction func onGraphTouch(_ sender: UIButton) {
-        if self.brain.evaluate().isPending {
+        let evalResult = self.brain.evaluate()
+        if evalResult.isPending {
             return
         }
         
@@ -255,6 +255,8 @@ class CalculatorViewController: UIViewController
             controller.function = { [weak self] x in
                 return self.map { $0.brain.evaluate(using: [variableName: x]).result ?? 0 } ?? 0
             }
+            
+            controller.titleDescription = evalResult.description
             
             self?.splitViewController.do {
                 $0.showDetailViewController(controller, sender: self)
