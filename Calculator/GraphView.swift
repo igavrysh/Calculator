@@ -32,6 +32,8 @@ class GraphView: UIView {
     @IBInspectable
     public var origin: CGPoint? {
         didSet {
+            self.save()
+            
             self.setNeedsDisplay()
         }
     }
@@ -39,6 +41,8 @@ class GraphView: UIView {
     @IBInspectable
     public var pointsPerUnit: CGFloat = 10 {
         didSet {
+            self.save()
+            
             setUpAxesDrawer()
             
             self.setNeedsDisplay()
@@ -66,6 +70,7 @@ class GraphView: UIView {
     
     override func draw(_ rect: CGRect) {
         let context =  UIGraphicsGetCurrentContext()
+        
         context.do { $0.clear(rect) }
         
         if self.axesDrawer == nil {
@@ -115,6 +120,8 @@ class GraphView: UIView {
     private func setUpAxesDrawer() {
         self.axesDrawer = AxesDrawer(color: self.graphCurveColor,
                                      contentScaleFactor: self.pointsPerUnit)
+        
+        self.load()
     }
     
 
@@ -151,5 +158,45 @@ class GraphView: UIView {
         point.y = CGFloat(function(Double(point.x)))
         
         return point.applying(self.transformFromOriginToStreen())
+    }
+}
+
+extension GraphView {
+    struct PropertyList {
+        var origin: CGPoint?
+        var pointsPerUnit: CGFloat
+    }
+    
+    private static let graphViewPropertiesKey = "graphViewPropertiesKey"
+    
+    func load() {
+        let storage = UserDefaults.standard
+        
+        (storage.object(forKey: GraphView.graphViewPropertiesKey) as? NSData)
+            .do { [weak self] data in
+                self.do {
+                    var decoded: Result<PropertyList> = Calculator.decode(data)
+                    switch decoded {
+                    case .Failure:
+                        print("Error: cannot decode UserDefaults")
+                    case .Success(let v):
+                        $0.origin = v.origin
+                        $0.pointsPerUnit = v.pointsPerUnit
+                    }
+                }
+        }
+    }
+    
+    func save() {
+        let storage = UserDefaults.standard
+        let data = Calculator.encode(PropertyList(
+            origin: self.origin,
+            pointsPerUnit: self.pointsPerUnit
+        ))
+        
+        storage.set(
+            data,
+            forKey: GraphView.graphViewPropertiesKey
+        )
     }
 }

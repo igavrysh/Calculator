@@ -16,6 +16,8 @@ class CalculatorViewController: UIViewController
     @IBOutlet weak var display: UILabel!
     @IBOutlet var log: UILabel!
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var graphButton: UIButton!
+    
     var errorView: ErrorView!
     
     var userIsInTheMiddleOfTyping = false
@@ -90,6 +92,8 @@ class CalculatorViewController: UIViewController
     
     private func process() {
         let expression = self.brain.evaluateWithLogging(using: self.variables)
+        
+        self.graphButton.isEnabled = !expression.isPending
         
         guard let result = expression.result else {
             self.touchedSequence = "0"

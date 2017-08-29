@@ -16,7 +16,7 @@
                         <viewControllerLayoutGuide type="top" id="8Uq-Vv-Ey1"/>
                         <viewControllerLayoutGuide type="bottom" id="0f8-LZ-a2z"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Im8-CV-7D8" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
+                    <view key="view" contentMode="redraw" id="Im8-CV-7D8" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
@@ -114,7 +114,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="YHx-rV-Y32">
                                         <rect key="frame" x="0.0" y="71.5" width="320" height="56.5"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYT-wg-cdG">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYT-wg-cdG">
                                                 <rect key="frame" x="0.0" y="0.0" width="63" height="56.5"/>
                                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="showGraph" label="graph"/>
@@ -519,6 +519,7 @@
                     <navigationItem key="navigationItem" id="YCX-ap-4QV"/>
                     <connections>
                         <outlet property="display" destination="44c-km-tNJ" id="7xk-ag-wan"/>
+                        <outlet property="graphButton" destination="TYT-wg-cdG" id="dDJ-5f-c7K"/>
                         <outlet property="stackView" destination="77U-6U-6Ep" id="YJR-Sd-sO6"/>
                     </connections>
                 </viewController>
