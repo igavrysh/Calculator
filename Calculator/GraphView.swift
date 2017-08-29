@@ -45,7 +45,6 @@ class GraphView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setUpGraphView()
         setUpAxesDrawer()
     }
     
@@ -56,7 +55,6 @@ class GraphView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        setUpGraphView()
         setUpAxesDrawer()
     }
     
@@ -94,18 +92,21 @@ class GraphView: UIView {
         }
     }
     
+    // MARK: Public
+    
+    public func centerOrigin() {
+        let rect = self.bounds
+        
+        self.origin =  CGPoint(x: rect.width / 2, y: rect.height / 2)
+    }
+    
     // MARK: Private
     
     private func setUpAxesDrawer() {
         self.axesDrawer = AxesDrawer(color: self.graphCurveColor, contentScaleFactor: 50)
     }
     
-    private func setUpGraphView() {
-        let rect = self.bounds
-        
-        self.origin =  CGPoint(x: rect.width / 2, y: rect.height / 2)
-    }
-    
+
     private func pointForScreenX(_ x: Double) -> CGPoint? {
         return self.dataSource
             .map { dataSource in

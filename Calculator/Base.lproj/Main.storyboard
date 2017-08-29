@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,34 +16,11 @@
                         <viewControllerLayoutGuide type="top" id="8Uq-Vv-Ey1"/>
                         <viewControllerLayoutGuide type="bottom" id="0f8-LZ-a2z"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Im8-CV-7D8">
+                    <view key="view" contentMode="scaleToFill" id="Im8-CV-7D8" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iDT-hr-eoZ" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
-                                <rect key="frame" x="-4" y="20" width="328" height="460"/>
-                                <gestureRecognizers/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="graphCurveColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="19p-PU-a5b" appends="YES" id="zlz-qI-04w"/>
-                                </connections>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="0f8-LZ-a2z" firstAttribute="top" secondItem="iDT-hr-eoZ" secondAttribute="bottom" id="0UK-Aa-gna"/>
-                            <constraint firstItem="iDT-hr-eoZ" firstAttribute="leading" secondItem="Im8-CV-7D8" secondAttribute="leadingMargin" constant="-20" id="RGL-pQ-40C"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="iDT-hr-eoZ" secondAttribute="trailing" constant="-20" id="pi3-1F-fzf"/>
-                            <constraint firstItem="iDT-hr-eoZ" firstAttribute="top" secondItem="8Uq-Vv-Ey1" secondAttribute="bottom" id="y2U-Cl-tz5"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="graphView" destination="iDT-hr-eoZ" id="w5M-FF-9Tr"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8yE-CN-oOk" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="19p-PU-a5b">

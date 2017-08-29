@@ -10,10 +10,23 @@ import UIKit
 
 class GraphViewController: UIViewController, GraphViewSource {
     public var function: (Double) -> Double = { _ in 0 }
-    @IBOutlet weak var graphView: GraphView!
+    weak var graphView: GraphView! {
+        return self.view as! GraphView
+    }
     
     override func viewDidLoad() {
         self.graphView.dataSource = self
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.graphView.centerOrigin()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     func valueForX(_ x: Double) -> Double {
@@ -45,15 +58,10 @@ class GraphViewController: UIViewController, GraphViewSource {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.graphTouchPoint(touches, with: event).do { [weak self] initialTouchPoint in
             self.do {
-                
-                print("Touch began")
-                
                 let initialOriginPoint = $0.graphView.origin
                 
                 $0.moveOriginWithNewPoint = { [weak self] point in
                     self.do {
-                        print("Initial touch point: \(initialTouchPoint)")
-                        
                         $0.graphView.origin = CGPoint(
                             x: initialOriginPoint.x + (point.x - initialTouchPoint.x),
                             y: initialOriginPoint.y + (point.y - initialTouchPoint.y)
