@@ -19,4 +19,14 @@ class GraphViewController: UIViewController, GraphViewSource {
     func valueForX(_ x: Double) -> Double {
         return function(x)
     }
+    
+    @IBAction func onPanGesture(_ sender: UIPanGestureRecognizer) {
+        
+        let translation = sender.translation(in: self.graphView)
+        
+        self.graphView.origin = CGPoint(
+            x: graphView.origin.x + translation.x,
+            y: graphView.origin.y + translation.y)
+        
+    }
 }

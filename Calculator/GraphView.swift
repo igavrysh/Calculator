@@ -30,10 +30,14 @@ class GraphView: UIView {
     let sampleGraph = SampleGraph()
     
     @IBInspectable
-    var origin: CGPoint = CGPoint(x: 0, y: 0)
+    public var origin: CGPoint = CGPoint(x: 0, y: 0) {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
     
     @IBInspectable
-    var pointsPerUnit: CGFloat = 10
+    public var pointsPerUnit: CGFloat = 10
     
     @IBInspectable
     var graphCurveColor: UIColor = UIColor.white
@@ -41,17 +45,24 @@ class GraphView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        setUpGraphView()
         setUpAxesDrawer()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
         
+        setUpGraphView()
         setUpAxesDrawer()
     }
     
     override func draw(_ rect: CGRect) {
-        self.origin =  CGPoint(x :rect.width / 2, y: rect.height / 2)
+        let context =  UIGraphicsGetCurrentContext()
+        context.do { $0.clear(rect) }
         
         if self.axesDrawer == nil {
             setUpAxesDrawer()
@@ -87,6 +98,12 @@ class GraphView: UIView {
     
     private func setUpAxesDrawer() {
         self.axesDrawer = AxesDrawer(color: self.graphCurveColor, contentScaleFactor: 50)
+    }
+    
+    private func setUpGraphView() {
+        let rect = self.bounds
+        
+        self.origin =  CGPoint(x: rect.width / 2, y: rect.height / 2)
     }
     
     private func pointForScreenX(_ x: Double) -> CGPoint? {

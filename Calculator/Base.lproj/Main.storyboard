@@ -23,11 +23,15 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iDT-hr-eoZ" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
                                 <rect key="frame" x="-4" y="20" width="328" height="460"/>
+                                <gestureRecognizers/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="graphCurveColor">
                                         <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="19p-PU-a5b" appends="YES" id="zlz-qI-04w"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
@@ -43,6 +47,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8yE-CN-oOk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="19p-PU-a5b">
+                    <connections>
+                        <action selector="onPanGesture:" destination="W5M-O4-1Uc" id="pAQ-d0-U59"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-4552" y="-77"/>
         </scene>
