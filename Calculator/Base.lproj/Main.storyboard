@@ -23,10 +23,14 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iDT-hr-eoZ" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
                                 <rect key="frame" x="-4" y="20" width="328" height="460"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="graphCurveColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="0f8-LZ-a2z" firstAttribute="top" secondItem="iDT-hr-eoZ" secondAttribute="bottom" id="0UK-Aa-gna"/>
                             <constraint firstItem="iDT-hr-eoZ" firstAttribute="leading" secondItem="Im8-CV-7D8" secondAttribute="leadingMargin" constant="-20" id="RGL-pQ-40C"/>
