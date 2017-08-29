@@ -23,8 +23,13 @@
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="9Yh-Jb-y5d" appends="YES" id="Fhe-C0-Ig3"/>
+                            <outletCollection property="gestureRecognizers" destination="45K-fT-UwC" appends="YES" id="TfN-HD-dgR"/>
                         </connections>
                     </view>
+                    <connections>
+                        <outlet property="pinchGestureRecogniser" destination="45K-fT-UwC" id="fCd-QG-Nl0"/>
+                        <outlet property="tapGestureRecogniser" destination="9Yh-Jb-y5d" id="y0m-D0-aFz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8yE-CN-oOk" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="19p-PU-a5b">
@@ -37,6 +42,11 @@
                         <action selector="onDoubleTapGesture:" destination="W5M-O4-1Uc" id="Nmp-F7-b0I"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pinchGestureRecognizer id="45K-fT-UwC">
+                    <connections>
+                        <action selector="onPinchGesture:" destination="W5M-O4-1Uc" id="DWs-Mo-VQ7"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-4552" y="-77"/>
         </scene>

@@ -37,7 +37,11 @@ class GraphView: UIView {
     }
     
     @IBInspectable
-    public var pointsPerUnit: CGFloat = 10
+    public var pointsPerUnit: CGFloat = 10 {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
     
     @IBInspectable
     var graphCurveColor: UIColor = UIColor.white
@@ -46,6 +50,8 @@ class GraphView: UIView {
         super.init(frame: frame)
         
         setUpAxesDrawer()
+        
+        centerOrigin()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -105,7 +111,7 @@ class GraphView: UIView {
     // MARK: Private
     
     private func setUpAxesDrawer() {
-        self.axesDrawer = AxesDrawer(color: self.graphCurveColor, contentScaleFactor: 50)
+        self.axesDrawer = AxesDrawer(color: self.graphCurveColor, contentScaleFactor: 10)
     }
     
 

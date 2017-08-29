@@ -8,7 +8,15 @@
 
 import UIKit
 
-class GraphViewController: UIViewController, GraphViewSource {
+class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognizerDelegate {
+    
+    @IBOutlet var pinchGestureRecogniser: UIPinchGestureRecognizer!
+    @IBOutlet var tapGestureRecogniser: UITapGestureRecognizer!
+    
+    private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
+    private var scaleWithValue: ((CGFloat) -> Void)? = nil
+    
+    
     public var function: (Double) -> Double = { _ in 0 }
     weak var graphView: GraphView! {
         return self.view as! GraphView
@@ -44,8 +52,6 @@ class GraphViewController: UIViewController, GraphViewSource {
     func valueForX(_ x: Double) -> Double {
         return function(x)
     }
-    
-    private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
     
     @IBAction func onPanGesture(_ sender: UIPanGestureRecognizer) {
         
@@ -94,8 +100,40 @@ class GraphViewController: UIViewController, GraphViewSource {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.moveOriginWithNewPoint = nil
     }
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
+    {
+        return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return true
+    }
     
     @IBAction func onDoubleTapGesture(_ sender: UITapGestureRecognizer) {
         self.graphView.origin = sender.location(in: self.graphView)
+    }
+    
+    @IBAction func onPinchGesture(_ sender: UIPinchGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.began {
+            let initialPointsPerUnit = self.graphView.pointsPerUnit
+            
+            self.scaleWithValue = { [weak self] scale in
+                self.do {
+                    $0.graphView.pointsPerUnit = initialPointsPerUnit * scale
+                }
+            }
+        } else if sender.state == UIGestureRecognizerState.changed {
+            self.scaleWithValue.do { scale in
+                scale(sender.scale)
+            }
+        } else {
+            self.scaleWithValue = nil
+        }
     }
 }

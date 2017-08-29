@@ -244,6 +244,10 @@ class CalculatorViewController: UIViewController
     
     
     @IBAction func onGraphTouch(_ sender: UIButton) {
+        if self.brain.evaluate().isPending {
+            return
+        }
+        
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
         let graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController") as? GraphViewController
         
