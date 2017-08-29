@@ -155,9 +155,9 @@
 				85CFACDC1E82F4EC00D50C4C /* CalculatorViewController.swift */,
 				E008CFB21F1BB035009E811C /* DataStructures.swift */,
 				E0AEB7761F52C83B003EF6D1 /* AdaptiveLabel.swift */,
+				E01F14EA1F524A9F00A868C9 /* GlobalSplitViewController.swift */,
 				85CFACDE1E82F4EC00D50C4C /* Main.storyboard */,
 				85CFACEC1E82F58D00D50C4C /* Supporting Files */,
-				E01F14EA1F524A9F00A868C9 /* GlobalSplitViewController.swift */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";

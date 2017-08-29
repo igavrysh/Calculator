@@ -14,17 +14,20 @@ class GlobalSplitViewController: UISplitViewController, UISplitViewControllerDel
         super.viewDidLoad()
         
         self.delegate = self
+        
+        self.preferredDisplayMode = .allVisible
     }
     
     func splitViewController(_ splitViewController: UISplitViewController,
                              collapseSecondary secondaryViewController: UIViewController,
                              onto primaryViewController: UIViewController) -> Bool
     {
+        /*
         if let navigationController = secondaryViewController as? UINavigationController,
             let _ = navigationController.topViewController as? GraphViewController
         {
             return false
-        }
+        }*/
         
         return true
     }

@@ -252,10 +252,9 @@ class CalculatorViewController: UIViewController
                 return self.map { $0.brain.evaluate(using: [variableName: x]).result ?? 0 } ?? 0
             }
             
-            self.do {
-                $0.navigationController?.pushViewController(controller, animated: true)
+            self?.splitViewController.do {
+                $0.showDetailViewController(controller, sender: self)
             }
         }
     }
-    
 }

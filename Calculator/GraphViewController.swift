@@ -17,12 +17,20 @@ class GraphViewController: UIViewController, GraphViewSource {
     override func viewDidLoad() {
         self.graphView.dataSource = self
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.graphView.centerOrigin()
+        if (self.splitViewController?.viewControllers.count)! > 1 {
+            
+            if let masterController = self.splitViewController?.viewControllers[0] as? UIViewController,
+                let detailController = self.splitViewController?.viewControllers[1] as? UIViewController
+            {
+                let detailBounds = detailController.view.bounds
+                let masterBounds = masterController.view.bounds
+                
+                self.graphView.origin = CGPoint(x: (detailBounds.width - masterBounds.width ) / 2,
+                                                y: detailBounds.width / 2)
+            }
+        } else {
+            self.graphView.centerOrigin()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
