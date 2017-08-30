@@ -22,13 +22,6 @@ class GlobalSplitViewController: UISplitViewController, UISplitViewControllerDel
                              collapseSecondary secondaryViewController: UIViewController,
                              onto primaryViewController: UIViewController) -> Bool
     {
-        /*
-        if let navigationController = secondaryViewController as? UINavigationController,
-            let _ = navigationController.topViewController as? GraphViewController
-        {
-            return false
-        }*/
-        
         return true
     }
     

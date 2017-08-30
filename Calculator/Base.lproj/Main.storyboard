@@ -48,7 +48,7 @@
                     </connections>
                 </pinchGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-4552" y="-77"/>
+            <point key="canvasLocation" x="-4553" y="11"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="l6L-sg-hGB">
@@ -76,7 +76,6 @@
                 <splitViewController id="OcS-Tc-Vw6" customClass="GlobalSplitViewController" customModule="Calculator" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="lFg-Ae-dvy" kind="relationship" relationship="masterViewController" id="iqw-mi-Mhb"/>
-                        <segue destination="W5M-O4-1Uc" kind="relationship" relationship="detailViewController" id="7hR-1b-sYt"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WJl-qd-jIQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -530,7 +529,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-3758" y="-759"/>
+            <point key="canvasLocation" x="-3720" y="-750"/>
         </scene>
     </scenes>
 </document>

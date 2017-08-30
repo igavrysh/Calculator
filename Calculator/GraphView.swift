@@ -32,6 +32,8 @@ class GraphView: UIView {
     private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
     private var scaleWithValue: ((CGFloat) -> Void)? = nil
     
+    private var drawRect: CGRect?
+    
     @IBInspectable
     public var origin: CGPoint? {
         didSet {
@@ -42,7 +44,7 @@ class GraphView: UIView {
     @IBInspectable
     public var pointsPerUnit: CGFloat = 10 {
         didSet {
-            setUpAxesDrawer()
+            setupAxesDrawer()
             
             self.setNeedsDisplay()
         }
@@ -53,27 +55,35 @@ class GraphView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        setUpAxesDrawer()
+    
+        setupGraphView()
+        setupAxesDrawer()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        setUpAxesDrawer()
+        setupGraphView()
+        setupAxesDrawer()
     }
     
     override func draw(_ rect: CGRect) {
+        self.drawRect = rect
+        
         let context =  UIGraphicsGetCurrentContext()
         
         context.do { $0.clear(rect) }
         
         if self.axesDrawer == nil {
-            setUpAxesDrawer()
+            setupAxesDrawer()
         }
         
         if self.origin == nil {
@@ -164,9 +174,45 @@ class GraphView: UIView {
     
     // MARK: Private
     
-    private func setUpAxesDrawer() {
+    private func setupAxesDrawer() {
         self.axesDrawer = AxesDrawer(color: self.graphCurveColor,
                                      contentScaleFactor: self.pointsPerUnit)
+    }
+    
+    private func setupGraphView() {
+        NotificationCenter.default.removeObserver(
+            self
+        )
+        
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name.UIDeviceOrientationDidChange,
+            object: nil,
+            queue: nil,
+            using: deviceDidRotate
+        )
+    }
+    
+    private func deviceDidRotate(notification: Notification) {
+        guard let origin = self.origin else {
+            return
+        }
+        
+        guard let drawRect = self.drawRect else {
+            return
+        }
+        
+        let screenCenter = CGPoint(
+            x: drawRect.origin.x + drawRect.size.width / 2 ,
+            y: drawRect.origin.y + drawRect.size.height / 2
+        )
+        
+        let dx = screenCenter.x - origin.x
+        let dy = screenCenter.y - origin.y
+        
+        self.origin = CGPoint(
+            x: self.bounds.origin.x + self.bounds.width / 2 + dy,
+            y: self.bounds.origin.y + self.bounds.height / 2 + dx
+        )
     }
 
     private func pointForScreenX(_ x: Double) -> CGPoint? {

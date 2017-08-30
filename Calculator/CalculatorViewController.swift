@@ -18,6 +18,8 @@ class CalculatorViewController: UIViewController
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var graphButton: UIButton!
     
+    var graphViewController: GraphViewController?
+    
     var errorView: ErrorView!
     
     var userIsInTheMiddleOfTyping = false
@@ -252,8 +254,10 @@ class CalculatorViewController: UIViewController
             return
         }
         
-        let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController") as? GraphViewController
+        if self.graphViewController == nil {
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+            self.graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController") as? GraphViewController
+        }
         
         graphViewController.do { [weak self] controller in
             controller.function = { [weak self] x in
@@ -261,6 +265,7 @@ class CalculatorViewController: UIViewController
             }
             
             controller.titleDescription = evalResult.description
+
             
             self?.splitViewController.do {
                 $0.showDetailViewController(controller, sender: self)
