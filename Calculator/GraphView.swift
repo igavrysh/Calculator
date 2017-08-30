@@ -29,6 +29,9 @@ class GraphView: UIView {
     
     let sampleGraph = SampleGraph()
     
+    private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
+    private var scaleWithValue: ((CGFloat) -> Void)? = nil
+    
     @IBInspectable
     public var origin: CGPoint? {
         didSet {
@@ -115,6 +118,54 @@ class GraphView: UIView {
         self.origin =  CGPoint(x: rect.width / 2, y: rect.height / 2)
     }
     
+    public func moveOrigin(to point: CGPoint) {
+        self.origin = point
+    }
+    
+    public func touchBegan(at initialTouchPoint: CGPoint) {
+        self.origin.do { (initialOriginPoint: CGPoint) in
+            
+            self.moveOriginWithNewPoint = { [weak self] point in
+                self.do {
+                    $0.origin = CGPoint(
+                        x: initialOriginPoint.x + (point.x - initialTouchPoint.x),
+                        y: initialOriginPoint.y + (point.y - initialTouchPoint.y)
+                    )
+                }
+            }
+        }
+    }
+    
+    public func touchMove(to point: CGPoint) {
+        self.moveOriginWithNewPoint.do { originMover in
+            originMover(point)
+        }
+    }
+    
+    public func touchEnd() {
+        self.moveOriginWithNewPoint = nil
+    }
+    
+    public func pinchStart(at scale: CGFloat) {
+        let initialPointsPerUnit = self.pointsPerUnit
+        
+        self.scaleWithValue = { [weak self] scale in
+            self.do {
+                $0.pointsPerUnit = initialPointsPerUnit * scale
+            }
+        }
+    }
+    
+    public func pinchZoom(with scale: CGFloat) {
+        self.scaleWithValue.do { scaler in
+            scaler(scale)
+        }
+    }
+    
+    public func pinchEnd() {
+        self.scaleWithValue = nil
+    }
+    
     // MARK: Private
     
     private func setUpAxesDrawer() {
@@ -123,7 +174,6 @@ class GraphView: UIView {
         
         self.load()
     }
-    
 
     private func pointForScreenX(_ x: Double) -> CGPoint? {
         return self.dataSource
@@ -175,7 +225,7 @@ extension GraphView {
         (storage.object(forKey: GraphView.graphViewPropertiesKey) as? NSData)
             .do { [weak self] data in
                 self.do {
-                    var decoded: Result<PropertyList> = Calculator.decode(data)
+                    let decoded: Result<PropertyList> = Calculator.decode(data)
                     switch decoded {
                     case .Failure:
                         print("Error: cannot decode UserDefaults")

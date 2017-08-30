@@ -23,9 +23,6 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
         }
     }
     
-    private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
-    private var scaleWithValue: ((CGFloat) -> Void)? = nil
-    
     weak var graphView: GraphView! {
         return self.view as! GraphView
     }
@@ -94,31 +91,21 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.graphTouchPoint(touches, with: event).do { [weak self] initialTouchPoint in
             self.do {
-                guard let initialOriginPoint = $0.graphView.origin else {
-                    return
-                }
-                
-                $0.moveOriginWithNewPoint = { [weak self] point in
-                    self.do {
-                        $0.graphView.origin = CGPoint(
-                            x: initialOriginPoint.x + (point.x - initialTouchPoint.x),
-                            y: initialOriginPoint.y + (point.y - initialTouchPoint.y)
-                        )
-                    }
-                }
+                $0.graphView.touchBegan(at: initialTouchPoint)
             }
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        lift((self.graphTouchPoint(touches, with: event), self.moveOriginWithNewPoint))
-            .do { touchPoint, functor in
-                functor(touchPoint)
+        self.graphTouchPoint(touches, with: event).do { [weak self] touchPoint in
+            self.do {
+                $0.graphView.touchMove(to: touchPoint)
+            }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.moveOriginWithNewPoint = nil
+        self.graphView.touchEnd()
     }
 
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -136,24 +123,16 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
     }
     
     @IBAction func onDoubleTapGesture(_ sender: UITapGestureRecognizer) {
-        self.graphView.origin = sender.location(in: self.graphView)
+        self.graphView.moveOrigin(to: sender.location(in: self.graphView))
     }
     
     @IBAction func onPinchGesture(_ sender: UIPinchGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
-            let initialPointsPerUnit = self.graphView.pointsPerUnit
-            
-            self.scaleWithValue = { [weak self] scale in
-                self.do {
-                    $0.graphView.pointsPerUnit = initialPointsPerUnit * scale
-                }
-            }
+            self.graphView.pinchStart(at: sender.scale)
         } else if sender.state == UIGestureRecognizerState.changed {
-            self.scaleWithValue.do { scale in
-                scale(sender.scale)
-            }
+            self.graphView.pinchZoom(with: sender.scale)
         } else {
-            self.scaleWithValue = nil
+            self.graphView.pinchEnd()
         }
     }
 }
