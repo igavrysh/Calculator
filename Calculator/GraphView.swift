@@ -35,8 +35,6 @@ class GraphView: UIView {
     @IBInspectable
     public var origin: CGPoint? {
         didSet {
-            self.save()
-            
             self.setNeedsDisplay()
         }
     }
@@ -44,8 +42,6 @@ class GraphView: UIView {
     @IBInspectable
     public var pointsPerUnit: CGFloat = 10 {
         didSet {
-            self.save()
-            
             setUpAxesDrawer()
             
             self.setNeedsDisplay()
@@ -171,8 +167,6 @@ class GraphView: UIView {
     private func setUpAxesDrawer() {
         self.axesDrawer = AxesDrawer(color: self.graphCurveColor,
                                      contentScaleFactor: self.pointsPerUnit)
-        
-        self.load()
     }
 
     private func pointForScreenX(_ x: Double) -> CGPoint? {
@@ -212,41 +206,43 @@ class GraphView: UIView {
 }
 
 extension GraphView {
-    struct PropertyList {
-        var origin: CGPoint?
-        var pointsPerUnit: CGFloat
-    }
+    private static let pointsPerUnitPropertiesKey = "pointsPerUnitPropertiesKey"
+    private static let originPropertiesKey = "originPropertiesKey"
+    private static let originXPropertiesKey = "originXPropertiesKey"
+    private static let originYPropertiesKey = "originYPropertiesKey"
     
-    private static let graphViewPropertiesKey = "graphViewPropertiesKey"
+    func save() {
+        let storage = UserDefaults.standard
+        
+        self.origin.do { origin in
+            let originDict = [
+                GraphView.originXPropertiesKey: origin.x,
+                GraphView.originYPropertiesKey: origin.y
+            ]
+            
+            storage.set(originDict, forKey: GraphView.originPropertiesKey)
+        }
+        
+        storage.set(Double(self.pointsPerUnit), forKey: GraphView.pointsPerUnitPropertiesKey)
+    }
     
     func load() {
         let storage = UserDefaults.standard
         
-        (storage.object(forKey: GraphView.graphViewPropertiesKey) as? NSData)
-            .do { [weak self] data in
-                self.do {
-                    let decoded: Result<PropertyList> = Calculator.decode(data)
-                    switch decoded {
-                    case .Failure:
-                        print("Error: cannot decode UserDefaults")
-                    case .Success(let v):
-                        $0.origin = v.origin
-                        $0.pointsPerUnit = v.pointsPerUnit
+        (storage.object(forKey: GraphView.originPropertiesKey) as? [String: CGFloat])
+            .do { [weak self] originDictionary in
+                if let x = originDictionary[GraphView.originXPropertiesKey],
+                    let y = originDictionary[GraphView.originYPropertiesKey]
+                {
+                    self.do {
+                        $0.origin = CGPoint(x: x, y: y)
                     }
                 }
         }
-    }
-    
-    func save() {
-        let storage = UserDefaults.standard
-        let data = Calculator.encode(PropertyList(
-            origin: self.origin,
-            pointsPerUnit: self.pointsPerUnit
-        ))
         
-        storage.set(
-            data,
-            forKey: GraphView.graphViewPropertiesKey
-        )
+        (storage.value(forKey: GraphView.pointsPerUnitPropertiesKey) as? Double)
+            .do { pointsPerUnit in
+                self.pointsPerUnit = CGFloat(pointsPerUnit)
+        }
     }
 }

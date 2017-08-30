@@ -35,8 +35,16 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
         addLogLabel()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    
+        self.graphView.load()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.graphView.save()
     }
     
     func valueForX(_ x: Double) -> Double {
