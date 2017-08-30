@@ -26,7 +26,7 @@ struct CalculatorBrain {
         case binaryOperationCheck((Double, Double) -> String?)
     }
     
-    private enum Operand {
+    fileprivate enum Operand {
         case value (Double)
         case variable (String)
         
@@ -79,8 +79,8 @@ struct CalculatorBrain {
     // MARK: Properties
     
     private var availableOperations = CalculatorBrain.defaultOperations
-    private var operands: Queue<Operand> = Queue()
-    private var operations: Queue<String> = Queue()
+    fileprivate var operands: Queue<Operand> = Queue()
+    fileprivate var operations: Queue<String> = Queue()
     
     mutating func setOperand(_ operand: Double) {
         addOperand(Operand.value(operand))
@@ -311,5 +311,21 @@ struct CalculatorBrain {
         if self.availableOperations[symbol] != nil {
             self.operations.enqueue(symbol)
         }
+    }
+}
+
+extension CalculatorBrain {
+    func save() {
+        for var operation in self.operations {
+            print("\(operation)")
+        }
+        
+        for var operand in self.operands {
+            print("\(operand)")
+        }
+    }
+    
+    func load() {
+        
     }
 }

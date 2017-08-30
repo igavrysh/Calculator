@@ -24,5 +24,4 @@ class GlobalSplitViewController: UISplitViewController, UISplitViewControllerDel
     {
         return true
     }
-    
 }

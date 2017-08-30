@@ -20,8 +20,13 @@ struct Stack<T> {
     }
 }
 
-struct Queue<T> {
+struct Queue<T>: Sequence {
     private var values: [T] = []
+
+    func makeIterator() -> IndexingIterator<Array<T>> {
+        return values.makeIterator()
+    }
+    
     
     mutating func enqueue(_ value: T) {
         self.values.append(value)
