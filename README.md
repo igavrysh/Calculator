@@ -18,5 +18,10 @@
 * operand types: .variable and .value
 * undo operation
 * long press on ->M button shows the value of inputed variable
+* graphs
+* errors processing
+* last operation / graph zoom settings storage
 
 <img src="./img/screen1.png" width="500">
+<img src="./img/screen2.png" width="500">
+<img src="./img/screen3.png" width="700">
