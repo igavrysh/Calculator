@@ -43,6 +43,8 @@ class CalculatorViewController: UIViewController
             if splitViewController.viewControllers.count > 1 {
                 self.do {
                     $0.graphViewController = splitViewController.viewControllers[1] as? GraphViewController
+                    
+                    $0.reloadGraphViewController()
                 }
             }
         }
@@ -201,6 +203,19 @@ class CalculatorViewController: UIViewController
         }
     }
     
+    private func reloadGraphViewController() {
+        self.graphViewController.do { [weak self] controller in
+            controller.function = { [weak self] x in
+                return self.map { $0.brain.evaluate(using: [variableName: x]).result ?? 0 } ?? 0
+            }
+            
+            controller.graphView.setNeedsDisplay()
+            
+            //let evalResult = self.brain.evaluate()
+            //controller.titleDescription = evalResult.description
+        }
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -277,14 +292,9 @@ class CalculatorViewController: UIViewController
             self.graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController") as? GraphViewController
         }
         
-        graphViewController.do { [weak self] controller in
-            controller.function = { [weak self] x in
-                return self.map { $0.brain.evaluate(using: [variableName: x]).result ?? 0 } ?? 0
-            }
-            
-            controller.titleDescription = evalResult.description
-
-            
+        reloadGraphViewController()
+        
+        self.graphViewController.do { [weak self] controller in
             self?.splitViewController.do {
                 $0.showDetailViewController(controller, sender: self)
             }
