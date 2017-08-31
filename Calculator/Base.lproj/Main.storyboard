@@ -76,6 +76,7 @@
                 <splitViewController id="OcS-Tc-Vw6" customClass="GlobalSplitViewController" customModule="Calculator" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="lFg-Ae-dvy" kind="relationship" relationship="masterViewController" id="iqw-mi-Mhb"/>
+                        <segue destination="W5M-O4-1Uc" kind="relationship" relationship="detailViewController" id="Q0C-5B-Whb"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WJl-qd-jIQ" userLabel="First Responder" sceneMemberID="firstResponder"/>

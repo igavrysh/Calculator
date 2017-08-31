@@ -18,7 +18,7 @@ class CalculatorViewController: UIViewController
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var graphButton: UIButton!
     
-    var graphViewController: GraphViewController?
+    @IBOutlet weak var graphViewController: GraphViewController?
     
     var errorView: ErrorView!
     
@@ -37,7 +37,15 @@ class CalculatorViewController: UIViewController
         
         self.brain.load()
         
-        self.process()
+        process()
+        
+        self.splitViewController.do { [weak self] splitViewController in
+            if splitViewController.viewControllers.count > 1 {
+                self.do {
+                    $0.graphViewController = splitViewController.viewControllers[1] as? GraphViewController
+                }
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
