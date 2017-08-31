@@ -13,7 +13,7 @@ struct CalculatorBrain {
     // MARK: -
     // MARK: Subtypes
     
-    private enum Operation {
+    enum Operation {
         case constant (Double)
         case unaryOperation ((Double) -> Double)
         case binaryOperation ((Double, Double) -> Double)
@@ -21,12 +21,12 @@ struct CalculatorBrain {
         case equals
     }
     
-    private enum ArgCheck {
+    enum ArgCheck {
         case unaryOperationCheck((Double) -> String?)
         case binaryOperationCheck((Double, Double) -> String?)
     }
     
-    fileprivate enum Operand {
+    enum Operand  {
         case value (Double)
         case variable (String)
         
@@ -315,17 +315,95 @@ struct CalculatorBrain {
 }
 
 extension CalculatorBrain {
+    static let OperationsKey = "CalculatorBrainOperationsKey"
+    static let OperandsKey = "CalculatorBrainOperandsKey"
+    
     func save() {
-        for var operation in self.operations {
-            print("\(operation)")
-        }
+        let operands = self.operands.valuesArray().map { OperandWrapper(e: $0) }
+        let ops = self.operations.valuesArray()
         
-        for var operand in self.operands {
-            print("\(operand)")
-        }
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject:operands)
+        
+        UserDefaults.standard.set(encodedData, forKey: CalculatorBrain.OperandsKey)
+        UserDefaults.standard.set(ops, forKey: CalculatorBrain.OperationsKey)
     }
     
-    func load() {
+    mutating func load() {
+        let oprnds = (UserDefaults.standard.object(forKey: CalculatorBrain.OperandsKey) as? Data)
+            .flatMap {
+                NSKeyedUnarchiver.unarchiveObject(with: $0) as? [OperandWrapper]
+            }
+            .map {
+                $0.map { $0.e }
+            }
+
+        let ops = UserDefaults.standard.object(forKey: CalculatorBrain.OperationsKey) as? [String]
         
+        lift((oprnds, ops))
+            .do { oprnds, ops in
+                operations.addValues(in: ops)
+                operands.addValues(in: oprnds)
+        }
+    }
+}
+
+extension CalculatorBrain.Operand {
+    enum Base: String {
+        case value
+        case variable
+    }
+    var base: Base {
+        switch self {
+        case .value:
+            return .value
+        case .variable:
+            return .variable
+        }
+    }
+}
+
+class OperandWrapper: NSObject, NSCoding {
+    var e: CalculatorBrain.Operand
+    
+    // Memberwise initializer
+    init(e: CalculatorBrain.Operand ) {
+        self.e = e
+    }
+    
+    // MARK: NSCoding
+    required convenience init?(coder decoder: NSCoder) {
+        guard let rawCase = decoder.decodeObject(forKey: "case") as? String,
+            let base = CalculatorBrain.Operand.Base(rawValue: rawCase) else {
+                return nil
+        }
+        
+        let e: CalculatorBrain.Operand
+        
+        switch base {
+        case .variable:
+            guard let value = decoder.decodeObject(forKey: "value") as? String else {
+                return nil
+            }
+            
+            e = .variable(value)
+            
+        case .value:
+            let value = decoder.decodeDouble(forKey: "value")
+            e = .value(value)
+        }
+        
+        self.init(e: e)
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(e.base.rawValue, forKey: "case")
+        
+        switch e {
+        case .variable(let value):
+            aCoder.encode(value, forKey: "value")
+            
+        case .value(let value):
+            aCoder.encode(value, forKey: "value")
+        }
     }
 }

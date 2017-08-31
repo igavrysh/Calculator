@@ -34,6 +34,16 @@ class CalculatorViewController: UIViewController
         addErrorView()
         
         addLogLabel()
+        
+        self.brain.load()
+        
+        self.process()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.brain.save()
     }
     
     @IBAction func touchDigit(_ sender: UIButton) {

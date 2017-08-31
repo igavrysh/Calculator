@@ -27,6 +27,9 @@ struct Queue<T>: Sequence {
         return values.makeIterator()
     }
     
+    func valuesArray() -> [T] {
+        return Array.init(self.values)
+    }
     
     mutating func enqueue(_ value: T) {
         self.values.append(value)
@@ -34,6 +37,14 @@ struct Queue<T>: Sequence {
     
     mutating func dequeue() -> T? {
         return self.isEmpty ? nil : self.values.removeFirst()
+    }
+    
+    mutating func addValues(in array: [T]) {
+        var values = array
+        
+        while values.count > 0 {
+            self.enqueue(values.removeFirst())
+        }
     }
     
     @discardableResult

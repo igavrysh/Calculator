@@ -259,6 +259,7 @@
 				TargetAttributes = {
 					85CFACD61E82F4EC00D50C4C = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 49DH34YDV8;
 						ProvisioningStyle = Automatic;
 					};
 					E0592BE11F4017EA0097A3D5 = {
@@ -512,6 +513,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 49DH34YDV8;
 				INFOPLIST_FILE = Calculator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ievgengavryshcompany.Calculator;
@@ -524,6 +526,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 49DH34YDV8;
 				INFOPLIST_FILE = Calculator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ievgengavryshcompany.Calculator;
