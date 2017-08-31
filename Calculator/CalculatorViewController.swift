@@ -11,11 +11,15 @@ import UIKit
 let variableName = "M"
 let decimalSymbol = "."
 
-class ViewController: UIViewController {
-    
+class CalculatorViewController: UIViewController
+{
     @IBOutlet weak var display: UILabel!
-    @IBOutlet weak var log: UILabel!
+    @IBOutlet var log: UILabel!
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var graphButton: UIButton!
+    
+    @IBOutlet weak var graphViewController: GraphViewController?
+    
     var errorView: ErrorView!
     
     var userIsInTheMiddleOfTyping = false
@@ -23,9 +27,33 @@ class ViewController: UIViewController {
     var variables: [String: Double]?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.displayValue = 0
         
         addErrorView()
+        
+        addLogLabel()
+        
+        self.brain.load()
+        
+        process()
+        
+        self.splitViewController.do { [weak self] splitViewController in
+            if splitViewController.viewControllers.count > 1 {
+                self.do {
+                    $0.graphViewController = splitViewController.viewControllers[1] as? GraphViewController
+                    
+                    $0.reloadGraphViewController()
+                }
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.brain.save()
     }
     
     @IBAction func touchDigit(_ sender: UIButton) {
@@ -87,6 +115,8 @@ class ViewController: UIViewController {
     private func process() {
         let expression = self.brain.evaluateWithLogging(using: self.variables)
         
+        self.graphButton.isEnabled = !expression.isPending
+        
         guard let result = expression.result else {
             self.touchedSequence = "0"
             self.log.text  = " "
@@ -97,7 +127,9 @@ class ViewController: UIViewController {
         
         self.displayValue = result
         self.log.text = expression.description
-        self.errorView.text = expression.error.map { "Error: " + $0 }
+        self.errorView.text = expression.error.map {
+            "Error: " + $0
+        }
     }
     
     private func addVariable(name: String, value: Double) {
@@ -146,6 +178,46 @@ class ViewController: UIViewController {
             
             present(variablesViewController, animated: true)
         }
+    }
+    
+    private func addLogLabel() {
+        let log = AdaptiveLabel.init(frame: CGRect(x:0, y:0, width: 800, height: 40))
+        log.accessibilityIdentifier = "description"
+        //log.backgroundColor = UIColor.black
+        log.textAlignment = .right
+        //log.textColor = UIColor.white
+        log.font = UIFont.systemFont(ofSize: 50, weight: UIFontWeightUltraLight)
+        log.minimumScaleFactor = 0.5
+        log.lineBreakMode = .byTruncatingHead
+        log.adjustsFontSizeToFitWidth = true
+        log.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        log.numberOfLines = 1
+        log.text = ""
+        
+        self.log = log
+        
+        self.navigationController.do {
+            $0.navigationBar.topItem.do {
+                $0.titleView = log
+            }
+        }
+    }
+    
+    private func reloadGraphViewController() {
+        self.graphViewController.do { [weak self] controller in
+            controller.function = { [weak self] x in
+                return self.map { $0.brain.evaluate(using: [variableName: x]).result ?? 0 } ?? 0
+            }
+            
+            controller.graphView.setNeedsDisplay()
+            
+            //let evalResult = self.brain.evaluate()
+            //controller.titleDescription = evalResult.description
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     @IBAction func performOperation(_ sender: UIButton) {
@@ -207,5 +279,25 @@ class ViewController: UIViewController {
         print("varaibles list long press")
         
         self.presentVariablesView(sourceView: sender.view)
+    }
+    
+    @IBAction func onGraphTouch(_ sender: UIButton) {
+        let evalResult = self.brain.evaluate()
+        if evalResult.isPending {
+            return
+        }
+        
+        if self.graphViewController == nil {
+            let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+            self.graphViewController = storyBoard.instantiateViewController(withIdentifier: "GraphViewController") as? GraphViewController
+        }
+        
+        reloadGraphViewController()
+        
+        self.graphViewController.do { [weak self] controller in
+            self?.splitViewController.do {
+                $0.showDetailViewController(controller, sender: self)
+            }
+        }
     }
 }
