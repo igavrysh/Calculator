@@ -276,8 +276,6 @@ class CalculatorViewController: UIViewController
     }
     
     @IBAction func varaiblesListLongPress(_ sender: UILongPressGestureRecognizer) {
-        print("varaibles list long press")
-        
         self.presentVariablesView(sourceView: sender.view)
     }
     

@@ -8,31 +8,44 @@
 
 import UIKit
 
-protocol GraphViewSource : class {
-    func valueForX(_ x: Double) -> Double
-}
-
-class SampleGraph: GraphViewSource {
-    private var function = {(x: Double) -> Double in
-        return pow(x, 2.0)
-    }
-    
-    func valueForX(_ x: Double) -> Double {
-        return self.function(x)
-    }
-}
-
 @IBDesignable
 class GraphView: UIView {
     var axesDrawer: AxesDrawer?
-    weak var dataSource: GraphViewSource?
-    
-    let sampleGraph = SampleGraph()
     
     private var moveOriginWithNewPoint: ((CGPoint) -> ())? = nil
     private var scaleWithValue: ((CGFloat) -> Void)? = nil
     
     private var drawRect: CGRect?
+    
+    public var function: ((Double) -> Double)? {
+        didSet {
+            var valuesCache: [Double: Double] = [:]
+            
+            func round(value: Double) -> Double {
+                let precision: Double = 4
+                
+                return floor(value * precision) / precision
+            }
+            
+            function.map { newFunction in
+                self.ifunction = { x in
+                    let xDash = round(value: x)
+                    
+                    if let y = valuesCache[xDash] {
+                        return y
+                    }
+                    
+                    let y = newFunction(xDash)
+                    
+                    valuesCache[xDash] = y
+                    
+                    return y
+                }
+            }
+        }
+    }
+    
+    private var ifunction: ((Double) -> Double)?
     
     @IBInspectable
     public var origin: CGPoint? {
@@ -100,7 +113,7 @@ class GraphView: UIView {
         
         let delta: Double = 1
         
-        self.dataSource.do { dataSource in
+        self.ifunction.do { ifunction in
             for xOffset in stride(from: 0, to: widthInPoints, by: delta) {
                 lift((self.pointForScreenX(xOffset),
                       self.pointForScreenX(xOffset + 1 * delta),
@@ -216,9 +229,11 @@ class GraphView: UIView {
     }
 
     private func pointForScreenX(_ x: Double) -> CGPoint? {
-        return self.dataSource
-            .map { dataSource in
-                return self.calculateFor(CGPoint(x: x, y: 0)) { dataSource.valueForX($0) }
+        return self.ifunction
+            .map { ifunction in
+                return self.calculateFor(CGPoint(x: x, y: 0)) {
+                    ifunction($0)
+                }
             }
             .flatMap { point in
                 return point.x.isFinite && point .y.isFinite ? point : nil
@@ -246,7 +261,7 @@ class GraphView: UIView {
     private func calculateFor(_ screenPoint: CGPoint, function: (Double) -> Double) -> CGPoint {
         var point = screenPoint.applying(self.transformFromScreenToOrigin().scaledBy(x: self.pointsPerUnit, y: self.pointsPerUnit))
         point.y = CGFloat(function(Double(point.x)))
-        
+
         return point.applying(self.transformFromOriginToStreen())
     }
 }

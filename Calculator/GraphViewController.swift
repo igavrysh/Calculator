@@ -8,13 +8,18 @@
 
 import UIKit
 
-class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognizerDelegate {
+class GraphViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet var log: UILabel?
     @IBOutlet var pinchGestureRecogniser: UIPinchGestureRecognizer!
     @IBOutlet var tapGestureRecogniser: UITapGestureRecognizer!
     
-    public var function: (Double) -> Double = { _ in 0 }
+    public var function: (Double) -> Double = { _ in 0 } {
+        didSet {
+            self.graphView.function = function
+        }
+    }
+    
     public var titleDescription: String? {
         didSet {
             self.log.do {
@@ -30,8 +35,6 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.graphView.dataSource = self
-        
         addLogLabel()
     }
     
@@ -45,10 +48,6 @@ class GraphViewController: UIViewController, GraphViewSource, UIGestureRecognize
         super.viewWillDisappear(animated)
         
         self.graphView.save()
-    }
-    
-    func valueForX(_ x: Double) -> Double {
-        return function(x)
     }
     
     @IBAction func onPanGesture(_ sender: UIPanGestureRecognizer) {
