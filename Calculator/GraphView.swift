@@ -218,7 +218,9 @@ class GraphView: UIView {
     private func pointForScreenX(_ x: Double) -> CGPoint? {
         return self.dataSource
             .map { dataSource in
-                return self.calculateFor(CGPoint(x: x, y: 0)) { dataSource.valueForX($0) }
+                return self.calculateFor(CGPoint(x: x, y: 0)) {
+                    dataSource.valueForX($0)
+                }
             }
             .flatMap { point in
                 return point.x.isFinite && point .y.isFinite ? point : nil
@@ -243,9 +245,22 @@ class GraphView: UIView {
         return self.transformFromScreenToOrigin().inverted()
     }
     
+    private var pointsCache: [CGFloat: CGFloat] = [:]
+    
     private func calculateFor(_ screenPoint: CGPoint, function: (Double) -> Double) -> CGPoint {
+        func round(value: CGFloat) -> CGFloat {
+            return CGFloat(floorf(Float(value * 4))) / 4
+        }
+        
         var point = screenPoint.applying(self.transformFromScreenToOrigin().scaledBy(x: self.pointsPerUnit, y: self.pointsPerUnit))
-        point.y = CGFloat(function(Double(point.x)))
+        point.x = round(value: point.x)
+        
+        if let y = pointsCache[point.x] {
+            point.y = y
+        } else {
+            point.y = CGFloat(function(Double(point.x)))
+            pointsCache[point.x] = point.y
+        }
         
         return point.applying(self.transformFromOriginToStreen())
     }
