@@ -21,15 +21,13 @@ class GraphView: UIView {
         didSet {
             var valuesCache: [Double: Double] = [:]
             
-            func round(value: Double) -> Double {
-                let precision: Double = 4
-                
+            func round(value: Double, precision: Double) -> Double {
                 return floor(value * precision) / precision
             }
             
             function.map { newFunction in
-                self.ifunction = { x in
-                    let xDash = round(value: x)
+                self.ifunction = { (x: Double, pointsPerUnit: Double) in
+                    let xDash = round(value: x, precision: pointsPerUnit)
                     
                     if let y = valuesCache[xDash] {
                         return y
@@ -45,7 +43,7 @@ class GraphView: UIView {
         }
     }
     
-    private var ifunction: ((Double) -> Double)?
+    private var ifunction: ((_ x: Double, _ pointsPerUnit: Double) -> Double)?
     
     @IBInspectable
     public var origin: CGPoint? {
@@ -229,10 +227,12 @@ class GraphView: UIView {
     }
 
     private func pointForScreenX(_ x: Double) -> CGPoint? {
+        let scale = Double(self.pointsPerUnit)
+        
         return self.ifunction
             .map { ifunction in
-                return self.calculateFor(CGPoint(x: x, y: 0)) {
-                    ifunction($0)
+                return self.calculateFor(CGPoint(x: x, y: 0)) { x in
+                    ifunction(x, scale)
                 }
             }
             .flatMap { point in
@@ -259,9 +259,9 @@ class GraphView: UIView {
     }
     
     private func calculateFor(_ screenPoint: CGPoint, function: (Double) -> Double) -> CGPoint {
-        var point = screenPoint.applying(self.transformFromScreenToOrigin().scaledBy(x: self.pointsPerUnit, y: self.pointsPerUnit))
+        var point = screenPoint.applying(self.transformFromScreenToOrigin())
         point.y = CGFloat(function(Double(point.x)))
-
+        
         return point.applying(self.transformFromOriginToStreen())
     }
 }

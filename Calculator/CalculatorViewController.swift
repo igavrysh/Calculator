@@ -205,8 +205,12 @@ class CalculatorViewController: UIViewController
     
     private func reloadGraphViewController() {
         self.graphViewController.do { [weak self] controller in
-            controller.function = { [weak self] x in
-                return self.map { $0.brain.evaluate(using: [variableName: x]).result ?? 0 } ?? 0
+            self.map {
+                let brain = $0.brain
+                
+                controller.function = { x in
+                    brain.evaluate(using: [variableName: x]).result ?? 0
+                }
             }
             
             controller.graphView.setNeedsDisplay()
