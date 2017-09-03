@@ -73,6 +73,8 @@ class CalculatorUITests: XCTestCase {
         self.backspaceOperationButton = self.app.buttons["backspace"]
         self.addVariableOperandButton = self.app.buttons["addVariableOperand"]
         self.setVariableValueButton = self.app.buttons["setVariableValue"]
+        
+        self.app.buttons["clearAllInputs"].tap()
     }
     
     override func tearDown() {
