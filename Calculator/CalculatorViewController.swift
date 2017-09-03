@@ -16,7 +16,7 @@ class CalculatorViewController: UIViewController
     @IBOutlet weak var display: UILabel!
     @IBOutlet var log: UILabel!
     @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var graphButton: UIButton!
+    @IBOutlet weak var graphButton: CalculatorButton!
     
     @IBOutlet weak var graphViewController: GraphViewController?
     
