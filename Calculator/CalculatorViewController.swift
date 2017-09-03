@@ -36,6 +36,7 @@ class CalculatorViewController: UIViewController
         addLogLabel()
         
         self.brain.load()
+        self.variables = self.brain.loadVariables()
         
         process()
         
@@ -54,6 +55,7 @@ class CalculatorViewController: UIViewController
         super.viewWillDisappear(animated)
         
         self.brain.save()
+        self.brain.save(variables: variables)
     }
     
     @IBAction func touchDigit(_ sender: UIButton) {
