@@ -317,6 +317,7 @@ struct CalculatorBrain {
 extension CalculatorBrain {
     static let OperationsKey = "CalculatorBrainOperationsKey"
     static let OperandsKey = "CalculatorBrainOperandsKey"
+    static let VariablesKey = "CalculatorBrainVariablesKey"
     
     func save() {
         let operands = self.operands.valuesArray().map { OperandWrapper(e: $0) }
@@ -328,7 +329,12 @@ extension CalculatorBrain {
         UserDefaults.standard.set(ops, forKey: CalculatorBrain.OperationsKey)
     }
     
+    func save(variables: [String: Double]?) {
+        UserDefaults.standard.set(variables, forKey: CalculatorBrain.VariablesKey)
+    }
+    
     mutating func load() {
+        // Operands loading
         let oprnds = (UserDefaults.standard.object(forKey: CalculatorBrain.OperandsKey) as? Data)
             .flatMap {
                 NSKeyedUnarchiver.unarchiveObject(with: $0) as? [OperandWrapper]
@@ -337,6 +343,7 @@ extension CalculatorBrain {
                 $0.map { $0.e }
             }
 
+        // Operations loading
         let ops = UserDefaults.standard.object(forKey: CalculatorBrain.OperationsKey) as? [String]
         
         lift((oprnds, ops))
@@ -344,6 +351,10 @@ extension CalculatorBrain {
                 operations.addValues(in: ops)
                 operands.addValues(in: oprnds)
         }
+    }
+    
+    func loadVariables() -> [String: Double]? {
+        return UserDefaults.standard.object(forKey: CalculatorBrain.VariablesKey) as? [String: Double]
     }
 }
 
