@@ -377,4 +377,23 @@ class CalculatorUITests: XCTestCase {
         XCTAssert(self.display == "1.1")
         XCTAssert(self.desc == "0.1+1=")
     }
+    
+    // M + 9 = √ ⇒ description is √(M+(), display is 3 because M is not set (thus 0.0)
+    func testMVariableOperation() {
+        self.addVariableOperandButton.tap()
+        XCTAssert(self.display == "M")
+        XCTAssert(self.desc.components(separatedBy: .whitespaces).joined() == "")
+        self.plusOperationButton.tap()
+        XCTAssert(self.display == "0")
+        XCTAssert(self.desc == "M+...")
+        self.nineDigitButton.tap()
+        XCTAssert(self.display == "9")
+        XCTAssert(self.desc == "M+...")
+        self.equalsOperationButton.tap()
+        XCTAssert(self.display == "9")
+        XCTAssert(self.desc == "M+9=")
+        self.squaredRootOperationButton.tap()
+        XCTAssert(self.display == "3")
+        XCTAssert(self.desc == "√(M+9)=")
+    }
 }
