@@ -65,6 +65,10 @@ class CalculatorViewController: UIViewController
         if isDecimalSymbol && (self.touchedSequence.map { $0.contains(decimalSymbol) }) == true {
             return
         }
+        
+        if self.isVariableAdded {
+            return
+        }
 
         if userIsInTheMiddleOfTyping {
             self.touchedSequence = self.touchedSequence! + digit
@@ -91,6 +95,14 @@ class CalculatorViewController: UIViewController
             self.sequence.do {
                 self.display.text = $0.prettyDoubleInString
             }
+        }
+    }
+    
+    var isVariableAdded: Bool {
+        get {
+            return self.touchedSequence.map {
+               $0.range(of: "[^a-zA-Z]", options: .regularExpression) == nil
+            } ?? false
         }
     }
     
@@ -228,11 +240,18 @@ class CalculatorViewController: UIViewController
     
     @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping || self.displayValue == 0 {
-            brain.setOperand(displayValue)
+            if isVariableAdded {
+                self.touchedSequence.do {
+                    brain.setOperand(variable: $0)
+                }
+            } else {
+                brain.setOperand(displayValue)
+            }
+            
             userIsInTheMiddleOfTyping = false
         }
 
-        sender.currentTitle.do { self.brain.performOperation($0)}
+        sender.currentTitle.do { self.brain.performOperation($0) }
         
         process()
     }
@@ -268,13 +287,6 @@ class CalculatorViewController: UIViewController
             
             self.touchedSequence = text
         }
-    }
-    
-    @IBAction func touchVariable(_ sender: UIButton) {
-        
-        self.brain.setOperand(variable: variableName)
-        
-        self.display.text = variableName
     }
     
     @IBAction func inputVariable(_ sender: UIButton) {

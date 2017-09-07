@@ -384,7 +384,7 @@ class CalculatorUITests: XCTestCase {
         XCTAssert(self.display == "M")
         XCTAssert(self.desc.components(separatedBy: .whitespaces).joined() == "")
         self.plusOperationButton.tap()
-        XCTAssert(self.display == "M")
+        XCTAssert(self.display == "0")
         XCTAssert(self.desc == "M+...")
         self.nineDigitButton.tap()
         XCTAssert(self.display == "9")
