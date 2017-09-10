@@ -37,6 +37,8 @@ class CalculatorButton : UIButton {
         self.addTarget(self,
                        action:#selector(CalculatorButton.onTouchDown(_:)),
                        for: UIControlEvents.touchDown)
+        
+        self.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     @objc private func onTouchUpInside(_ sender: UIButton!) {
